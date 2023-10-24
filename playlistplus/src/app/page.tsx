@@ -1,6 +1,13 @@
 import Image from 'next/image'
+import { useRouter } from 'next/navigation';
 
 export default function Home() {
+  const CLIENT_ID="463e8cd3eb06493faf19f84a0afab027"
+  const REDIRECT_URI="http://localhost:3000/"
+  const CLIENT_SECRET="172deb1fdd504a60b84b2efd70c7a5f1"
+  const AUTH_ENDPOINT = "https://accounts.spotify.com/authorize"
+  const RESPONSE_TYPE = "token"
+  
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
@@ -38,14 +45,8 @@ export default function Home() {
       </div>
 
       
-      <div className="">
-        <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://play.spotify.com"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            {' '}
+      <div className="Log in button">
+        <a href={`${AUTH_ENDPOINT}?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&scope=user-read-private%20user-read-email&response_type=${RESPONSE_TYPE}&state=state&show_dialog=true`}>
         <Image
           className="relative dark: dark"
           src="/signin.svg"
