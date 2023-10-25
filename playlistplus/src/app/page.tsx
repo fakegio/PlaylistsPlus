@@ -1,19 +1,27 @@
 import Image from 'next/image'
-import Waves from '../../components/waves'
+import express from 'express'
+import querystring from 'querystring'
 
+const app = express()
+const port = 3000
 
-
-async function getProfile(accessToken: string) {
-  const response = await fetch('https://api.spotify.com/v1/me', {
-    headers: {
-      Authorization: 'Bearer ' + accessToken
-    }
-  });
-
-  const data = await response.json();
+function generateRandomString(length: number) {
+  let result = '';
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  const charactersLength = characters.length;
+  let counter = 0;
+  while (counter < length) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    counter += 1;
+  }
+  return result;
 }
 
+
 export default function Home() {
+  var state = generateRandomString(16);
+  var scope = 'user-read-private user-read-email';
+
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       
@@ -53,7 +61,14 @@ export default function Home() {
 
       
       <div className="Log in button">
-        <a href={`https://accounts.spotify.com/authorize?client_id=${process.env.CLIENT_ID}&redirect_uri=${process.env.REDIRECT_URI}&scope=${process.env.SCOPE}&response_type=token&show_dialog=false`}>
+        <a href={'https://accounts.spotify.com/authorize?' +
+          querystring.stringify({
+            response_type: 'code',
+            client_id: process.env.CLIENT_ID,
+            scope: scope,
+            redirect_uri: process.env.REDIRECT_URI,
+            state: state
+          })}>
         <Image
           className="relative dark: dark"
           src="/images//signin.svg"
