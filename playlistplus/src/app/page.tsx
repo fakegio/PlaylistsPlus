@@ -1,15 +1,22 @@
 import Image from 'next/image'
-import { useRouter } from 'next/navigation';
+import Waves from '../../components/waves'
+
+
+
+async function getProfile(accessToken: string) {
+  const response = await fetch('https://api.spotify.com/v1/me', {
+    headers: {
+      Authorization: 'Bearer ' + accessToken
+    }
+  });
+
+  const data = await response.json();
+}
 
 export default function Home() {
-  const CLIENT_ID="463e8cd3eb06493faf19f84a0afab027"
-  const REDIRECT_URI="http://localhost:3000/"
-  const CLIENT_SECRET="172deb1fdd504a60b84b2efd70c7a5f1"
-  const AUTH_ENDPOINT = "https://accounts.spotify.com/authorize"
-  const RESPONSE_TYPE = "token"
-  
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
+      
       <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
         <p className="">
         </p>
@@ -22,7 +29,7 @@ export default function Home() {
           >
             {' '}
             <Image
-              src="/gotospotify.svg"
+              src="/images/gotospotify.svg"
               alt="Go To Spotify"
               className="dark"
               width={200}
@@ -36,7 +43,7 @@ export default function Home() {
       <div className="Playlists+">
         <Image
           className="relative dark: dark"
-          src="/Playlist+.svg"
+          src="/images/Playlist+.svg"
           alt="Playlist+ Logo"
           width={380}
           height={37}
@@ -46,10 +53,10 @@ export default function Home() {
 
       
       <div className="Log in button">
-        <a href={`${AUTH_ENDPOINT}?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&scope=user-read-private%20user-read-email&response_type=${RESPONSE_TYPE}&state=state&show_dialog=true`}>
+        <a href={`https://accounts.spotify.com/authorize?client_id=${process.env.CLIENT_ID}&redirect_uri=${process.env.REDIRECT_URI}&scope=${process.env.SCOPE}&response_type=token&show_dialog=false`}>
         <Image
           className="relative dark: dark"
-          src="/signin.svg"
+          src="/images//signin.svg"
           alt="Sign in Logo"
           width={380}
           height={37}
