@@ -59,6 +59,12 @@ function generateRandomString(length: number): string {
     });
   };
 
+  export const removeCredentials = async () => {
+    sessionStorage.removeItem("access_token");
+    sessionStorage.removeItem("code_verifier");
+    window.location.href = "/";
+  }
+
   export const login = async () => {
     window.location.href = "/dashboard"
   }

@@ -4,6 +4,7 @@ import { getToken } from '@/API/authorize';
 import { login } from '@/API/authorize';
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
+import * as React from 'react'
 
 export default function Home() {
   const [codeVerifier, setCodeVerifier] = useState('')
@@ -44,6 +45,7 @@ export default function Home() {
       </div>
 
       <div className="Playlists+">
+
         <Image
           className="relative dark: dark"
           src="/images/Playlist+.svg"
@@ -52,12 +54,12 @@ export default function Home() {
           height={37}
           priority
         />
+        
       </div>
 
       
       <div className="Sign In Button">
-        {codeVerifier ? <> Please wait...  </> 
-        : (
+        
       <button onClick = {authorize} className="login-button">
         <Image
           className="relative dark: dark"
@@ -68,7 +70,7 @@ export default function Home() {
           priority
         />
       </button>
-      )}
+      
       </div>
 
 
