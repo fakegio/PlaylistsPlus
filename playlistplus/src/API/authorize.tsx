@@ -59,6 +59,10 @@ function generateRandomString(length: number): string {
     });
   };
 
+  export const login = async () => {
+    window.location.href = "/dashboard"
+  }
+
   export const getToken = async () => {
     let codeVerifier = sessionStorage.getItem("code_verifier");
     let code = urlParams.get("code");
@@ -85,6 +89,7 @@ function generateRandomString(length: number): string {
       })
       .then((data: { access_token: string }) => {
         sessionStorage.setItem("access_token", data.access_token);
+        login();
       })
       .catch((error) => {
         console.error("Error:", error);

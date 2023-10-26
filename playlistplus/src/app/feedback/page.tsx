@@ -5,7 +5,7 @@ import '../globals.css'
 export default function Feedback() {
     const [form, setForm] = useState({name: "", email: "", feedback: ""});
 
-    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleChange = (event: { target: { name: any; value: any; }; }) => {
         const name = event.target.name;
         const value = event.target.value;
         setForm((prevForm) => ({...prevForm, [name]: value}))
@@ -14,6 +14,12 @@ export default function Feedback() {
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         alert("Thank you for submitting");
+    }
+
+    let token = sessionStorage.getItem("access_token")
+    /* verify theres a token at all times except for login screen */
+    if(!token){
+      window.location.href = "/"
     }
 
     return (

@@ -1,0 +1,576 @@
+.unionIcon {
+    position: relative;
+    width: 412.37px;
+    height: 290.83px;
+}
+.dashboard {
+    position: absolute;
+    height: 15%;
+    width: 39.38%;
+    top: 7.87%;
+    left: 30.42%;
+    font-size: 68px;
+    display: inline-block;
+    font-family: Montserrat;
+}
+.topArtists {
+    position: absolute;
+    height: 7.5%;
+    width: 31.09%;
+    top: 50.83%;
+    left: -0.68%;
+    font-size: 50px;
+    display: inline-block;
+}
+.topGenres {
+    position: absolute;
+    height: 7.5%;
+    width: 31.09%;
+    top: 31.2%;
+    left: -0.68%;
+    font-size: 50px;
+    display: inline-block;
+}
+.hiddenGem {
+    position: absolute;
+    height: 7.5%;
+    width: 31.09%;
+    top: 68.15%;
+    left: 71.77%;
+    display: inline-block;
+}
+.playlistGenerator {
+    position: absolute;
+    height: 7.5%;
+    width: 31.09%;
+    top: 42.5%;
+    left: 70.31%;
+    display: inline-block;
+}
+.topSongs {
+    position: absolute;
+    height: 7.5%;
+    width: 31.09%;
+    top: 70.46%;
+    left: -1.09%;
+    font-size: 50px;
+    display: inline-block;
+}
+.checkVerified03Icon {
+    position: absolute;
+    height: 5.59%;
+    top: 50%;
+    bottom: 44.41%;
+    left: 428.83px;
+    max-height: 100%;
+    width: 58.33px;
+    overflow: hidden;
+}
+.checkVerified03Icon1 {
+    position: absolute;
+    height: 5.59%;
+    top: 30.37%;
+    bottom: 64.04%;
+    left: 428.83px;
+    max-height: 100%;
+    width: 58.33px;
+    overflow: hidden;
+}
+.checkVerified03Icon2 {
+    position: absolute;
+    height: 5.59%;
+    top: 69.63%;
+    bottom: 24.78%;
+    left: 419.83px;
+    max-height: 100%;
+    width: 58.33px;
+    overflow: hidden;
+}
+.stars02Icon1 {
+    position: absolute;
+    top: 738px;
+    left: 1818px;
+    width: 48px;
+    height: 39px;
+    overflow: hidden;
+    cursor: pointer;
+}
+.goToSpotifyBtnChild {
+    position: absolute;
+    height: 98.92%;
+    width: 69.69%;
+    top: 0%;
+    right: 23.5%;
+    bottom: 1.08%;
+    left: 6.81%;
+    border-radius: 30px;
+    box-shadow: 0px 20px 50px rgba(0, 0, 0, 0.04);
+    mix-blend-mode: color;
+}
+.yourDislikedArtists1 {
+    position: absolute;
+    height: 64.52%;
+    width: 100%;
+    top: 35.48%;
+    left: 0%;
+    display: inline-block;
+    text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    -webkit-text-stroke: 1px rgba(0, 0, 0, 0.2);
+}
+.goToSpotifyBtn2 {
+    position: absolute;
+    height: 8.61%;
+    width: 38.54%;
+    top: 51.57%;
+    right: -0.83%;
+    bottom: 39.81%;
+    left: 62.29%;
+}
+.goToSpotifyBtnItem {
+    position: absolute;
+    height: 94.85%;
+    width: 65.64%;
+    top: 0%;
+    right: 34.36%;
+    bottom: 5.15%;
+    left: 0%;
+    border-radius: 30px;
+    box-shadow: 0px 20px 50px rgba(0, 0, 0, 0.04);
+    mix-blend-mode: color;
+}
+.shareApplication {
+    position: absolute;
+    height: 61.86%;
+    width: 94.2%;
+    top: 38.14%;
+    left: 5.8%;
+    display: inline-block;
+    text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    -webkit-text-stroke: 1px rgba(0, 0, 0, 0.2);
+}
+.goToSpotifyBtn3 {
+    position: absolute;
+    height: 8.98%;
+    width: 40.92%;
+    top: 58.33%;
+    right: -5.83%;
+    bottom: 32.69%;
+    left: 64.92%;
+}
+.frameChild {
+    position: absolute;
+    top: 8px;
+    left: 3px;
+    border-radius: 7px;
+    background-color: #fff;
+    width: 393px;
+    height: 51px;
+}
+.artistsSongsOr1 {
+    position: absolute;
+    top: 22px;
+    left: 50px;
+    font-weight: 500;
+    display: inline-block;
+    width: 191px;
+    height: 23px;
+}
+.searchIcon1 {
+    position: absolute;
+    height: 33.87%;
+    width: 5.2%;
+    top: 33.87%;
+    right: 90.35%;
+    bottom: 32.26%;
+    left: 4.46%;
+    max-width: 100%;
+    overflow: hidden;
+    max-height: 100%;
+}
+.rectangleParent {
+    position: absolute;
+    top: 166px;
+    left: 762px;
+    width: 396px;
+    height: 59px;
+    overflow: hidden;
+    font-size: 16px;
+    color: #131313;
+    font-family: 'Avenir Next';
+}
+.homePageChild {
+    position: absolute;
+    top: calc(50% + 50.81px);
+    left: 1832.25px;
+    width: 27.75px;
+    height: 36.37px;
+    cursor: pointer;
+}
+.homePageItem {
+    position: absolute;
+    top: calc(50% + 129.81px);
+    left: 1832.25px;
+    width: 27.75px;
+    height: 36.37px;
+    cursor: pointer;
+}
+.homePageInner {
+    position: absolute;
+    top: calc(50% - 78.19px);
+    left: 1832.25px;
+    width: 27.75px;
+    height: 36.37px;
+    cursor: pointer;
+}
+.homePageChild1 {
+    position: absolute;
+    top: calc(50% - 139.19px);
+    left: 1834.25px;
+    width: 27.75px;
+    height: 36.37px;
+    cursor: pointer;
+}
+.occupation {
+    position: absolute;
+    top: 0%;
+    left: 0%;
+    font-weight: 500;
+}
+.listboxTitle {
+    position: absolute;
+    height: 6.92%;
+    width: 90.91%;
+    top: 0%;
+    right: 4.55%;
+    bottom: 93.08%;
+    left: 4.55%;
+}
+.listboxbg {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0%;
+    right: 0%;
+    bottom: 0%;
+    left: 0%;
+    border-radius: 20px;
+    background-color: #fff;
+    box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.1);
+}
+.chevronIcon1 {
+    position: absolute;
+    height: 8.33%;
+    width: 4.39%;
+    top: 45.21%;
+    right: 7.45%;
+    bottom: 46.46%;
+    left: 88.16%;
+    border-radius: 20px;
+    max-width: 100%;
+    overflow: hidden;
+    max-height: 100%;
+    opacity: 0.8;
+}
+.selectOccupation {
+    position: absolute;
+    top: 0%;
+    left: 0%;
+}
+.placeholderText {
+    position: absolute;
+    height: 33.33%;
+    width: 65.71%;
+    top: 33.33%;
+    right: 28.57%;
+    bottom: 33.33%;
+    left: 5.71%;
+    border-radius: 20px;
+}
+.listboxMain {
+    position: absolute;
+    height: 20.76%;
+    width: 90.91%;
+    top: 9.69%;
+    right: 4.55%;
+    bottom: 69.55%;
+    left: 4.55%;
+    color: #666;
+}
+.div {
+    position: absolute;
+    top: 12px;
+    left: 16px;
+}
+.item1 {
+    align-self: stretch;
+    position: relative;
+    background-color: #fff;
+    height: 44px;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+.dropdownList {
+    position: absolute;
+    width: 90.91%;
+    top: 68px;
+    right: 4.55%;
+    left: 4.55%;
+    border-radius: 8px;
+    box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.1);
+    height: 1px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1px;
+    opacity: 0;
+}
+.clipList {
+    position: absolute;
+    height: 90.31%;
+    width: 100%;
+    top: 9.69%;
+    right: 0%;
+    bottom: 0%;
+    left: 0%;
+    overflow: hidden;
+}
+.profileComponent {
+    position: absolute;
+    top: 50px;
+    left: 269px;
+    border-radius: 10px;
+    width: 189px;
+    height: 231px;
+    text-align: left;
+    font-size: 16px;
+    color: #333;
+    font-family: Montserrat;
+}
+.moodsync {
+    position: absolute;
+    height: 7.5%;
+    width: 31.09%;
+    top: 37.04%;
+    left: 71.77%;
+    display: inline-block;
+}
+.homePageChild2 {
+    position: absolute;
+    top: calc(50% - 9.19px);
+    left: 1832.25px;
+    width: 27.75px;
+    height: 36.37px;
+    cursor: pointer;
+}
+.jointPlaylist {
+    position: absolute;
+    height: 7.5%;
+    width: 31.09%;
+    top: 48.7%;
+    left: 71.77%;
+    display: inline-block;
+}
+.rectangleDiv {
+    position: absolute;
+    height: 4.26%;
+    width: 9.74%;
+    top: 17.13%;
+    right: 7.03%;
+    bottom: 78.61%;
+    left: 83.23%;
+    border-radius: 30px;
+    background-color: #42c83c;
+    box-shadow: 0px 20px 50px rgba(0, 0, 0, 0.04);
+}
+.homePageChild3 {
+    position: absolute;
+    height: 5.09%;
+    width: 10.26%;
+    top: 16.67%;
+    right: 6.77%;
+    bottom: 78.24%;
+    left: 82.97%;
+    border-radius: 30px;
+    background-color: #25ed1c;
+    box-shadow: 0px 20px 50px rgba(0, 0, 0, 0.04);
+    mix-blend-mode: color;
+    cursor: pointer;
+}
+.goTo {
+    position: absolute;
+    height: 1.48%;
+    width: 5.1%;
+    top: 18.33%;
+    left: 82.5%;
+    font-size: 20px;
+    display: inline-block;
+    color: #322d2d;
+}
+.vectorIcon {
+    position: absolute;
+    height: 3.15%;
+    width: 5.47%;
+    top: 17.69%;
+    right: 7.5%;
+    bottom: 79.17%;
+    left: 87.03%;
+    max-width: 100%;
+    overflow: hidden;
+    max-height: 100%;
+}
+.bg1 {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 300px;
+    height: 80px;
+}
+.song {
+    align-self: stretch;
+    position: relative;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    height: 17px;
+    flex-shrink: 0;
+    text-shadow: 0px 0px 2px rgba(0, 0, 0, 0.4);
+}
+.heading {
+    position: absolute;
+    width: calc(100% - 52px);
+    top: 8px;
+    right: 44px;
+    left: 8px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 2px;
+}
+.iconIsotype1 {
+    position: absolute;
+    top: 10px;
+    right: 8px;
+    width: 18px;
+    height: 18px;
+}
+.iconPrevious1 {
+    position: relative;
+    width: 16px;
+    height: 16px;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+.previous {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: 8px 4px;
+}
+.total1 {
+    position: absolute;
+    width: 100%;
+    top: 0px;
+    right: 0px;
+    left: 0px;
+    background-color: rgba(255, 255, 255, 0.3);
+    height: 4px;
+}
+.progress {
+    flex: 1;
+    position: relative;
+    height: 4px;
+}
+.next {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: 8px 0px 8px 4px;
+}
+.controls {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+}
+.timeline {
+    align-self: stretch;
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 0px 0px 0px 4px;
+}
+.share {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: 10px;
+}
+.tools {
+    position: absolute;
+    width: 100%;
+    right: 0px;
+    bottom: 0px;
+    left: 0px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+}
+.headingParent {
+    position: absolute;
+    width: calc(100% - 80px);
+    top: 0px;
+    right: 0px;
+    left: 80px;
+    height: 80px;
+}
+.coverIcon {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 80px;
+    height: 80px;
+}
+.player {
+    align-self: stretch;
+    position: relative;
+    height: 80px;
+}
+.spotifyembed {
+    position: absolute;
+    top: 85px;
+    left: 1544px;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.8)), #1db954;
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    text-align: left;
+    font-size: 14px;
+    color: #fff;
+    font-family: Montserrat;
+}
+.homePage {
+    position: relative;
+    background-color: #322d2d;
+    width: 100%;
+    height: 1080px;
+    overflow: hidden;
+    text-align: center;
+    font-size: 36px;
+    color: #f5f5f5;
+    font-family: Roboto;
+}
+
