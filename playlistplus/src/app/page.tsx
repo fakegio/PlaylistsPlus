@@ -1,26 +1,18 @@
+"use client"
+import { authorize } from '@/API/authorize';
+import { getToken } from '@/API/authorize';
 import Image from 'next/image'
-import express from 'express'
-import querystring from 'querystring'
-
-const app = express()
-const port = 3000
-
-function generateRandomString(length: number) {
-  let result = '';
-  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  const charactersLength = characters.length;
-  let counter = 0;
-  while (counter < length) {
-    result += characters.charAt(Math.floor(Math.random() * charactersLength));
-    counter += 1;
-  }
-  return result;
-}
-
+import { useEffect, useState } from 'react'
 
 export default function Home() {
-  var state = generateRandomString(16);
-  var scope = 'user-read-private user-read-email';
+  const [codeVerifier, setCodeVerifier] = useState('')
+  useEffect(() => {
+    setCodeVerifier(sessionStorage.getItem("code_verifier") || "")
+    let token = sessionStorage.getItem("access_token")
+    if(!token){
+      getToken();
+    }
+  }, [])
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
@@ -60,24 +52,20 @@ export default function Home() {
       </div>
 
       
-      <div className="Log in button">
-        <a href={'https://accounts.spotify.com/authorize?' +
-          querystring.stringify({
-            response_type: 'code',
-            client_id: process.env.CLIENT_ID,
-            scope: scope,
-            redirect_uri: process.env.REDIRECT_URI,
-            state: state
-          })}>
+      <div className="Sign In Button">
+        {codeVerifier ? <> </> 
+        : (
+      <button onClick = {authorize} className="login-button">
         <Image
           className="relative dark: dark"
           src="/images//signin.svg"
           alt="Sign in Logo"
           width={380}
-          height={37}
+          height={30}
           priority
         />
-        </a>
+      </button>
+      )}
       </div>
 
 
