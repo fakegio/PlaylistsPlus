@@ -1,16 +1,17 @@
+"use client"
 import { useState } from 'react';
-import './globals.css'
+import '../globals.css'
 
 export default function Feedback() {
     const [form, setForm] = useState({name: "", email: "", feedback: ""});
 
-    const handleChange = (event) => {
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const name = event.target.name;
         const value = event.target.value;
         setForm((prevForm) => ({...prevForm, [name]: value}))
     }
 
-    const handleSubmit = (event) => {
+    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         alert("Thank you for submitting");
     }
@@ -50,7 +51,7 @@ export default function Feedback() {
                     <textarea
                     className="block w-3/4 text-gray-50 bg-gray-700 rounded-lg border border-gray-600 placeholder-gray-400 focus:ring-blue-500 focus:border-blue-500"
                     id="feedback"
-                    rows="5"
+                    rows={5}
                     required
                     placeholder="Leave your feedback here..."
                     value={form.feedback}
