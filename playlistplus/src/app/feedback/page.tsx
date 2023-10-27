@@ -23,16 +23,17 @@ export default function Feedback() {
     }
 
     return (
-        <main className="flex min-h-screen flex-col justify-between items-center p-24">
-            <h1 className="text-xl font-bold text-slate-100">Feedback Form</h1>
+        <main className="flex min-h-screen flex-col justify-center items-center p-24">
+            <h1 className="text-3xl font-bold mb-10 text-slate-100">Feedback Form</h1>
             <form className="justify-between" onSubmit={handleSubmit}>
                 <div className="grid gap-4 md:grid-cols-2">
-                    <div className="justify-center">
-                        <label className="block text-left font-medium text-slate-300" htmlFor="name">Name:</label>
+                    <div className="justify-center mb-2">
+                        <label className="block text-left font-medium text-slate-300 mb-1" htmlFor="name">Name:</label>
                         <input
-                        className="text-gray-50 bg-gray-700 rounded-lg border border-gray-600 placeholder-gray-400 focus:ring-blue-500 focus:border-blue-500"
+                        className="p-2.5 w-full text-gray-50 bg-gray-700 rounded-lg border border-gray-600 placeholder-gray-400 focus:ring-blue-500 focus:border-blue-500"
                         type="text"
                         id="name"
+                        name="name"
                         required
                         placeholder="John Doe"
                         value={form.name}
@@ -40,11 +41,12 @@ export default function Feedback() {
                         />
                     </div>
                     <div className="justify-center">
-                        <label className="block text-left font-medium text-slate-300" htmlFor="email">Email Address:</label>
+                        <label className="block text-left font-medium text-slate-300 mb-1" htmlFor="email">Email Address:</label>
                         <input
-                        className="text-gray-50 bg-gray-700 rounded-lg border border-gray-600 placeholder-gray-400 focus:ring-blue-500 focus:border-blue-500"
+                        className="p-2.5 w-full text-gray-50 bg-gray-700 rounded-lg border border-gray-600 placeholder-gray-400 focus:ring-blue-500 focus:border-blue-500"
                         type="email"
                         id="email"
+                        name="email"
                         required
                         placeholder="johndoe@email.com"
                         value={form.email}
@@ -53,10 +55,11 @@ export default function Feedback() {
                     </div>
                 </div>
                 <div className="justify-center">
-                    <label className="block text-left font-medium text-slate-300" htmlFor="feedback">Feedback:</label>
+                    <label className="block text-left font-medium text-slate-300 mb-1" htmlFor="feedback">Feedback:</label>
                     <textarea
-                    className="block w-3/4 text-gray-50 bg-gray-700 rounded-lg border border-gray-600 placeholder-gray-400 focus:ring-blue-500 focus:border-blue-500"
+                    className="block p-2.5 w-full text-gray-50 bg-gray-700 rounded-lg border border-gray-600 placeholder-gray-400 focus:ring-blue-500 focus:border-blue-500"
                     id="feedback"
+                    name="feedback"
                     rows={5}
                     required
                     placeholder="Leave your feedback here..."
@@ -64,7 +67,7 @@ export default function Feedback() {
                     onChange={handleChange}
                     />
                 </div>
-                <input className="text-white bg-blue-700 rounded-lg text-center font-medium hover:bg-blue-850 focus:ring-blue-300 focus:outline-none" type="submit" />
+                <button className="px-4 py-2 text-white bg-blue-700 rounded-lg text-center font-medium hover:bg-blue-800 active:bg-blue-900 focus:ring focus:ring-blue-300 focus:outline-none mt-5" type="submit">Submit</button>
             </form>
         </main>
   )
