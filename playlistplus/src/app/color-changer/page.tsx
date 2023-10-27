@@ -5,10 +5,10 @@ import React from 'react'
 import {  Dropdown,  DropdownTrigger,  DropdownMenu,  DropdownSection,  DropdownItem} from "@nextui-org/react";
 import { Button } from "@nextui-org/react";
 import { removeCredentials } from '@/API/authorize';
+import ColorChanger from './ColorChanger'; // Replace with the correct path to your ColorChanger component
 
 export default function Home() {
   const [codeVerifier, setCodeVerifier] = useState('')
-  const backgroundColors = localStorage.getItem('selectedBackgroundColor');
   useEffect(() => {
     setCodeVerifier(sessionStorage.getItem("code_verifier") || "")
     let token = sessionStorage.getItem("access_token")
@@ -17,11 +17,18 @@ export default function Home() {
       window.location.href = "/"
     }
   }, [])
+  
+  
+    return (
+      <main className="flex min-h-screen flex-col items-center justify-between p-24">
+        {/* ... existing code ... */}
+        
+          {/* Place the ColorChanger component here */}
+          <ColorChanger />
 
-  return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24" style={{ backgroundColor: backgroundColors, color: 'white', width: '100%', height: '100%' }}>
-      
-      <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
+  
+          {/* ... existing code ... */}
+          <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
       <Dropdown>
             <DropdownTrigger>
               <Button 
@@ -102,15 +109,7 @@ export default function Home() {
             />
           </a>
         </div>
-
-
-        
-
       </div>
-
-
-      <div className="mb-32 grid text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-4 lg:text-left">
-      </div>
-    </main>
-  )
-}
+      </main>
+    )
+  }

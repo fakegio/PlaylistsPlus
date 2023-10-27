@@ -4,7 +4,7 @@ import '../globals.css'
 
 export default function Feedback() {
     const [form, setForm] = useState({name: "", email: "", feedback: ""});
-
+    const backgroundColors = localStorage.getItem('selectedBackgroundColor');
     const handleChange = (event: { target: { name: any; value: any; }; }) => {
         const name = event.target.name;
         const value = event.target.value;
@@ -23,7 +23,7 @@ export default function Feedback() {
     }
 
     return (
-        <main className="flex min-h-screen flex-col justify-center items-center p-24">
+        <main className="flex min-h-screen flex-col justify-center items-center p-24" style={{ backgroundColor: backgroundColors, width: '100%', height: '100%' }}>
             <h1 className="text-3xl font-bold mb-10 text-slate-100">Feedback Form</h1>
             <form className="justify-between" onSubmit={handleSubmit}>
                 <div className="grid gap-4 md:grid-cols-2">
