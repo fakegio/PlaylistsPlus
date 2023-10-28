@@ -1,10 +1,10 @@
 "use client"
-import { useState } from 'react';
+import { useState , useEffect} from 'react';
 import '../globals.css'
 
 export default function Feedback() {
     const [form, setForm] = useState({name: "", email: "", feedback: ""});
-    const backgroundColors = localStorage.getItem('selectedBackgroundColor');
+    const [backgroundColors, setBackgroundColors] = useState('');
     const handleChange = (event: { target: { name: any; value: any; }; }) => {
         const name = event.target.name;
         const value = event.target.value;
@@ -15,7 +15,12 @@ export default function Feedback() {
         event.preventDefault();
         alert("Thank you for submitting");
     }
-
+    useEffect(() => {
+        const storedBackgroundColors = localStorage.getItem('selectedBackgroundColor');
+        if (storedBackgroundColors) {
+          setBackgroundColors(storedBackgroundColors);
+        }
+      }, [])
     let token = sessionStorage.getItem("access_token")
     /* verify theres a token at all times except for login screen */
     if(!token){

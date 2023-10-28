@@ -8,13 +8,17 @@ import { removeCredentials } from '@/API/authorize';
 
 export default function Home() {
   const [codeVerifier, setCodeVerifier] = useState('')
-  const backgroundColors = localStorage.getItem('selectedBackgroundColor');
+  const [backgroundColors, setBackgroundColors] = useState('');
   useEffect(() => {
     setCodeVerifier(sessionStorage.getItem("code_verifier") || "")
     let token = sessionStorage.getItem("access_token")
     /* verify theres a token at all times except for login screen */
     if(!token){
       window.location.href = "/"
+    }
+    const storedBackgroundColors = localStorage.getItem('selectedBackgroundColor');
+    if (storedBackgroundColors) {
+      setBackgroundColors(storedBackgroundColors);
     }
   }, [])
 
