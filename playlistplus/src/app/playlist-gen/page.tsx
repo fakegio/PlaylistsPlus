@@ -20,7 +20,7 @@ export default function Generators() {
             content={
               "Enter a song you love, and the generator will craft a playlist around it."
             }
-            typeOfPlaylist={"Song"}
+            typeOfPlaylist={"Track"}
           ></Generator>
           <Generator
             title={"Artist Spotlight"}
