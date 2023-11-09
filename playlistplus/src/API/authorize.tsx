@@ -41,7 +41,7 @@ export const authorize = async () => {
   generateCodeChallenge(codeVerifier).then((codeChallenge) => {
     const state: string = generateRandomString(16);
     const scope: string =
-      "user-read-private user-read-email streaming user-read-playback-state user-modify-playback-state";
+      "user-read-private user-read-email streaming user-read-playback-state user-modify-playback-state playlist-modify-public";
 
     sessionStorage.setItem("code_verifier", codeVerifier);
 

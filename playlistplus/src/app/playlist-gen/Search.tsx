@@ -1,8 +1,4 @@
-import { input } from "@nextui-org/react";
 import { ChangeEvent, useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import querystring from "querystring";
-
 //Interfaces so I can filter out compilation tracks
 interface Artist {
   name: string;
@@ -20,7 +16,6 @@ interface TrackObj {
 }
 
 export function Search({ typeOfPlaylist }: { typeOfPlaylist: string }) {
-  const router = useRouter();
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [searchTermID, setSearchTermID] = useState<string>("");
   const [token, setToken] = useState<string | null>("");
@@ -236,18 +231,22 @@ export function Search({ typeOfPlaylist }: { typeOfPlaylist: string }) {
       };
 
       let url = "";
+      let playlistTitle = "New";
 
       if (typeOfPlaylist === "Genre") {
+        playlistTitle = "Genre Explorer: " + searchTerm;
         url =
           "https://api.spotify.com/v1/recommendations?seed_genres=" +
           searchTerm +
           "&max_popularity=50&limit=40";
       } else if (typeOfPlaylist === "Track") {
+        playlistTitle = "Song Roulette: " + searchTerm;
         url =
           "https://api.spotify.com/v1/recommendations?seed_tracks=" +
           searchTermID +
           "&max_popularity=50&limit=40";
       } else {
+        playlistTitle = "Artist Spotlight: " + searchTerm;
         url =
           "https://api.spotify.com/v1/recommendations?seed_artists=" +
           searchTermID +
@@ -258,11 +257,10 @@ export function Search({ typeOfPlaylist }: { typeOfPlaylist: string }) {
         .then((data) => {
           const filteredData = filterCompilationAlbums(data);
           if (typeof window !== "undefined") {
-            localStorage.setItem(
-              "filteredPlaylistResults",
-              JSON.stringify(filteredData)
-            );
-            window.location.href = "/display-playlist-gen";
+            const data = [playlistTitle, filteredData];
+            const dataString = JSON.stringify(data);
+            sessionStorage.setItem("PlaylistData", dataString);
+            window.location.href = `/display-playlist-gen`;
           }
         })
         .catch((error) => console.error("Error fetching data:", error));
