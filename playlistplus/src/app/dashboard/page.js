@@ -1,19 +1,15 @@
 "use client"
 import { authorize, getToken, login, removeCredentials } from '@/API/authorize';
-import Image from 'next/image';
 import React, { useState, useEffect } from 'react';
+import './App.css';
 import Header from "./Header";
 import SearchBar from "./SearchBar";
-import './App.css';
-import SpotifyWebApi from 'spotify-web-api-js';
-const spotifyApi = new SpotifyWebApi();
-import Sidebar from './Sidebar'; // Import the Sidebar component
+import Sidebar from './Sidebar'; 
 
 
 
 
 export default function Home() {
-  //const [token, setToken] = useState<string | null>("");
   const [token, setToken] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [topArtists, setTopArtists] = useState([]);
@@ -23,81 +19,102 @@ export default function Home() {
   const [artist, setArtist] = useState(null);
 
   useEffect(() => {
-    
     setCodeVerifier(sessionStorage.getItem("code_verifier") || "");
-    setToken(sessionStorage.getItem("access_token") || "");
-    //setToken = sessionStorage.getItem("access_token");
-
-    if (token){
-
-      getToken
-    }
+    const token = sessionStorage.getItem("access_token")
+    console.log(token);
 
 
-    function getTopArtists(token) {
-      console.log("Fetching top artists...");
-      spotifyApi.setAccessToken(token);
-      spotifyApi.getMyTopArtists({ limit: 10 })
+      function getTopArtists() {
+      
+        console.log("Fetching top artists...");
+
+        fetch('https://api.spotify.com/v1/me/top/artists', {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        })
+        .then(response => {
+          if (!response.ok) {
+            if (response.status === 429) {
+              const retryAfter = response.headers.get('Retry-After');
+              console.log(`Rate limited. Retry after ${retryAfter} seconds.`);
+              // Implement logic to wait for the specified time before retrying.
+            } else if (response.status === 403) {
+              console.log("Forbidden. Check if the access token has the right scopes.");
+            } else {
+              throw new Error(`HTTP status ${response.status}`);
+            }
+          }
+          return response.json();
+        })
         .then(data => {
-          console.log("Top artists data:", data); // Log the data
+          console.log("Top artists data:", data);
           setTopArtists(data.items);
         })
         .catch(error => {
           console.error("Error getting top artists:", error);
+          if (error.response) {
+            // Log the response content when there's an error
+            error.response.text().then(text => console.error("Response content:", text));
+          }
+
+          setTopArtists([]);
         });
-    }
+      }
    
-    function getTopTracks(token) {
-      console.log("Fetching top tracks...");
-      spotifyApi.setAccessToken(token);
-      spotifyApi.getMyTopTracks({ limit: 10 })
+
+
+
+
+      function getTopTracks() {
+        console.log("Fetching top tracks...");
+        fetch('https://api.spotify.com/v1/me/top/tracks', {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        })
+        .then(response => {
+          if (!response.ok) {
+            if (response.status === 429) {
+              const retryAfter = response.headers.get('Retry-After');
+              console.log(`Rate limited. Retry after ${retryAfter} seconds.`);
+              // Implement logic to wait for the specified time before retrying.
+            } else if (response.status === 403) {
+              console.log("Forbidden. Check if the access token has the right scopes.");
+            } else {
+              throw new Error(`HTTP status ${response.status}`);
+            }
+          }
+          return response.json();
+        })
         .then(data => {
-          console.log("Top tracks data:", data); // Log the data
+          console.log("Top tracks data:", data);
           setTopTracks(data.items);
         })
         .catch(error => {
           console.error("Error getting top tracks:", error);
-        }); 
-     }
-
-  
-     function getArtistProfile(artistId) {
-      spotifyApi.getArtist(artistId)
-        .then((data) => {
-          setArtist(data);
-        })
-        .catch((error) => {
-          console.error("Error getting artist data:", error);
+          if (error.response) {
+            // Log the response content when there's an error
+            error.response.text().then(text => console.error("Response content:", text));
+          }
+          setTopTracks([]);
         });
-    }
-  
-
-
-    
-    if (!token) {
-      // Token is not available, handle this case
-      // You can redirect to the login page or display a message
-      // indicating that the user needs to log in.
-      console.error('Token not available. Redirecting to login...');
-      setToken();
-      // Example: redirect to the login page
-      //window.location.href = '/login'; // Update with your login route
-      } else{
-        getTopArtists(token); // Fetch top artists
-        getTopTracks(token); // Fetch top tracks
-        getArtistProfile(token);
       }
+
+
+
+
       
-    
 
 
-    
-    const storedBackgroundColors = localStorage.getItem('selectedBackgroundColor');
-    if (storedBackgroundColors) {
-      setBackgroundColors(storedBackgroundColors);
-    }
-
-
+      if (!token) {
+        // Token is not available, handle this case
+        console.error('Token not available. Redirecting to login...');
+        } 
+      else{
+          getTopArtists(token); // Fetch top artists
+          getTopTracks(token); // Fetch top tracks
+        } 
   }, []);
   
 
@@ -112,15 +129,23 @@ export default function Home() {
 
   // Function to handle artist search
   const handleSearch = (query) => {
-    spotifyApi.searchArtists(query)
-      .then((data) => {
-        // Update the searchResults state with the search results
-        setSearchResults(data.artists.items);
-      })
-      .catch((error) => {
-        console.error("Error searching for artists:", error);
-      });
+    // You need to replace 'YOUR_API_ENDPOINT' with the actual Spotify API endpoint.
+    fetch(`https://api.spotify.com/v1/search?q=${query}&type=artist`, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    })
+    .then(response => response.json())
+    .then(data => {
+      setSearchResults(data.artists.items);
+    })
+    .catch(error => {
+      console.error("Error searching for artists:", error);
+    });
   };
+
+
+
   // ... your JSX rendering ...
   <div className="search-results">
     {searchResults.map((artist) => (
@@ -128,17 +153,7 @@ export default function Home() {
     ))}
   </div>
 
-const artistProfileSection = artist && (
-  <div className="artist-profile">
-    <h2>Artist Profile</h2>
-    <h3>{artist.name}</h3>
-    {artist.images.length > 0 && (
-      <img src={artist.images[0].url} alt={artist.name} />
-    )}
-    <p>{artist.genres.join(', ')}</p>
-    {/* Add more details as needed */}
-  </div>
-);
+
 
 const artistPopularitySection = artist && (
   <div className="artist-popularity">
@@ -149,15 +164,20 @@ const artistPopularitySection = artist && (
 );
 
 const handleArtistSelect = (artistId) => {
-  // Fetch artist popularity
-  spotifyApi.getArtist(artistId)
-    .then((data) => {
-      setArtist(data);
-    })
-    .catch((error) => {
-      console.error("Error getting artist data:", error);
-    });
-  };
+  // You need to replace 'YOUR_API_ENDPOINT' with the actual Spotify API endpoint.
+  fetch(`https://api.spotify.com/v1/artists/${artistId}`, {
+    headers: {
+      'Authorization': `Bearer ${token}`
+    }
+  })
+  .then(response => response.json())
+  .then(data => {
+    setArtist(data);
+  })
+  .catch(error => {
+    console.error("Error getting artist data:", error);
+  });
+};
 
 
 
@@ -197,7 +217,7 @@ return (
       </ul>
 
 
-      {artistProfileSection}
+
       {artistPopularitySection}
     
 
