@@ -3,7 +3,6 @@ import { authorize, getToken, login, removeCredentials } from '@/API/authorize';
 import React, { useState, useEffect } from 'react';
 import './App.css';
 import Header from "./Header";
-import SearchBar from "./SearchBar";
 import Sidebar from './Sidebar'; 
 
 
@@ -17,6 +16,15 @@ export default function Home() {
   const [codeVerifier, setCodeVerifier] = useState('')
   const [backgroundColors, setBackgroundColors] = useState('');
   const [artist, setArtist] = useState(null);
+  const [selectedArtist, setSelectedArtist] = useState(null);
+  const [selectedTrack, setSelectedTrack] = useState(null);
+
+  const [selectedArtistPopularity, setSelectedArtistPopularity] = useState(null);
+  const [selectedTrackPopularity, setSelectedTrackPopularity] = useState(null);
+
+ 
+
+
 
   useEffect(() => {
     setCodeVerifier(sessionStorage.getItem("code_verifier") || "");
@@ -28,7 +36,7 @@ export default function Home() {
       
         console.log("Fetching top artists...");
 
-        fetch('https://api.spotify.com/v1/me/top/artists', {
+        fetch('https://api.spotify.com/v1/me/top/artists?limit=5', {
           headers: {
             'Authorization': `Bearer ${token}`
           }
@@ -68,7 +76,7 @@ export default function Home() {
 
       function getTopTracks() {
         console.log("Fetching top tracks...");
-        fetch('https://api.spotify.com/v1/me/top/tracks', {
+        fetch('https://api.spotify.com/v1/me/top/tracks?limit=5', {
           headers: {
             'Authorization': `Bearer ${token}`
           }
@@ -102,6 +110,10 @@ export default function Home() {
       }
 
 
+      
+  
+
+
 
 
       
@@ -115,11 +127,51 @@ export default function Home() {
           getTopArtists(token); // Fetch top artists
           getTopTracks(token); // Fetch top tracks
         } 
+
   }, []);
   
 
  
+  const handleArtistSelect = (artistId) => {
+    fetch(`https://api.spotify.com/v1/artists/${artistId}`, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`HTTP status ${response.status}`);
+      }
+      return response.json();
+    })
+    .then(data => {
+      setSelectedArtist(data);
+    })
+    .catch(error => {
+      console.error("Error getting artist details:", error);
+    });
+  };
 
+  const handleTrackSelect = (trackId) => {
+    fetch(`https://api.spotify.com/v1/tracks/${trackId}`, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`HTTP status ${response.status}`);
+      }
+      return response.json();
+    })
+    .then(data => {
+      setSelectedTrack(data); // Set the selected track
+      setSelectedTrackPopularity(data.popularity);
+    })
+    .catch(error => {
+      console.error("Error getting track details:", error);
+    });
+  };
   
 
 
@@ -127,57 +179,46 @@ export default function Home() {
 
 
 
-  // Function to handle artist search
-  const handleSearch = (query) => {
-    // You need to replace 'YOUR_API_ENDPOINT' with the actual Spotify API endpoint.
-    fetch(`https://api.spotify.com/v1/search?q=${query}&type=artist`, {
-      headers: {
-        'Authorization': `Bearer ${token}`
-      }
-    })
-    .then(response => response.json())
-    .then(data => {
-      setSearchResults(data.artists.items);
-    })
-    .catch(error => {
-      console.error("Error searching for artists:", error);
-    });
+const handleDisplayPopularity = () => {
+  // Check if an artist is selected
+  if (selectedArtist) {
+    // Display the popularity of the selected artist
+    setSelectedArtistPopularity(selectedArtist.popularity);
+  }
+  if (selectedTrack){
+    setSelectedTrackPopularity(selectedTrack.popularity);
+  }
+};
+
+
+  const handleArtistChange = (event) => {
+    const selectedArtistId = event.target.value;
+    const artist = topArtists.find((a) => a.id === selectedArtistId);
+    setSelectedArtist(artist);
+  };
+
+  const handleTrackChange = (event) => {
+    const selectedTrackId = event.target.value;
+    const track = topTracks.find((a) => a.id === selectedTrackId);
+    setSelectedTrack(track);
   };
 
 
 
-  // ... your JSX rendering ...
-  <div className="search-results">
-    {searchResults.map((artist) => (
-      <div key={artist.id}>{artist.name}</div>
-    ))}
-  </div>
+
+  
+
+
+  
+  
+
+  
+
+  
 
 
 
-const artistPopularitySection = artist && (
-  <div className="artist-popularity">
-    <h2>Artist Popularity</h2>
-    <h3>{artist.name}</h3>
-    <p>Popularity: {artist.popularity}%</p>
-  </div>
-);
 
-const handleArtistSelect = (artistId) => {
-  // You need to replace 'YOUR_API_ENDPOINT' with the actual Spotify API endpoint.
-  fetch(`https://api.spotify.com/v1/artists/${artistId}`, {
-    headers: {
-      'Authorization': `Bearer ${token}`
-    }
-  })
-  .then(response => response.json())
-  .then(data => {
-    setArtist(data);
-  })
-  .catch(error => {
-    console.error("Error getting artist data:", error);
-  });
-};
 
 
 
@@ -189,49 +230,117 @@ return (
     <Sidebar /> {/* Include the Sidebar component here */}
     <Header />
     <div className="center">
-      <SearchBar onSearch={handleSearch} />
     </div>
+
+   
+
+
+
+
+
+    
     <div className="button-container">
       <button className="button">Mood Sync</button>
       <button className="button">Playlist Generator</button>
       <button className="button">Joint Playlist</button>
       <button className="button">Liked/Dislike Songs</button>
     </div>
-    <div className="analytics-header">
-      <h2>Analytics</h2>
-      {/* Add content related to analytics here */}
-    </div>
+   
 
     <div className="right-content">
       <div className="top-artists textbox"> Top Artists</div>
-      <h2>Top Artists</h2>
-      <ul>
-        {topArtists.map((artist) => (
-          <li 
-          key={artist.id} 
-          className="red-text"
-          onClick={() => handleArtistSelect(artist.id)}>  
-          {artist.name}
-          </li>
-        ))}
-      </ul>
+      <div className="artist-images-container">
+          {topArtists.map((artist) => (
+            <div key={artist.id} className="artist-image-container">
+              {artist.images.length > 0 && (
+                <img
+                  src={artist.images[0].url}
+                  alt={artist.name}
+                  className="artist-image"
+                />
+              )}
+              <div className="artist-name">{artist.name}</div>
+            </div>
+          ))}
+        </div>
 
 
 
-      {artistPopularitySection}
+
+      
+
     
 
 
-      <div className="top-genres textbox">Top Tracks</div>
-      <h2>Top Tracks</h2>
-      <ul>
-        {topTracks.map((track) => (
-          <li key={track.id} className="white-text">
-            {track.name}
-          </li>
-        ))}
-      </ul>
+<div className="top-genres textbox">Top Tracks</div>
+<div className="track-list">
+  {topTracks.map((track) => (
+    <div key={track.id} className="track-container">
+      {track.album.images.length > 0 && (
+        <img
+          src={track.album.images[0].url}
+          alt={track.name}
+          className="track-image"
+        />
+      )}
+      <div className="track-details">
+        <div className="track-name">{track.name}</div>
+        <div className="track-artists">
+          {track.artists.map((artist) => artist.name).join(", ")}
+        </div>
+      </div>
     </div>
-  </div>
+        ))}
+     </div>
+
+     <div>
+          <label>Select an artist:</label>
+          <select onChange={handleArtistChange}>
+            <option value="">-- Select an artist --</option>
+            {topArtists.map((artist) => (
+              <option key={artist.id} value={artist.id}>
+                {artist.name}
+              </option>
+            ))}
+          </select>
+          <button onClick={handleDisplayPopularity} className="button">
+            Display Popularity
+          </button>
+
+          {selectedArtistPopularity !== null && (
+            <div>
+              <h3>{selectedArtist.name}'s Popularity:</h3>
+              <p>{selectedArtistPopularity}</p>
+            </div>
+          )}
+        </div>
+
+
+        <div>
+          <label>Select a track:</label>
+          <select onChange={handleTrackChange}>
+            <option value="">-- Select a track --</option>
+            {topTracks.map((track) => (
+              <option key={track.id} value={track.id}>
+                {track.name} by {track.artists.map((artist) => artist.name).join(", ")}
+              </option>
+            ))}
+          </select>
+          <button onClick={handleDisplayPopularity} className="button">
+            Display Popularity
+          </button>
+
+          {selectedTrackPopularity !== null && (
+            <div>
+              <h3>Selected Track's Popularity:</h3>
+              <p>{selectedTrackPopularity}</p>
+            </div>
+          )}
+        </div>
+
+
+
+      </div>
+    </div>
 );
 }
