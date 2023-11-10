@@ -21,6 +21,8 @@ export default function Home() {
 
   const [selectedArtistPopularity, setSelectedArtistPopularity] = useState(null);
   const [selectedTrackPopularity, setSelectedTrackPopularity] = useState(null);
+  const [timeRange, setTimeRange] = useState('short_term'); // Default time range is 'short_term'
+
 
  
 
@@ -36,7 +38,7 @@ export default function Home() {
       
         console.log("Fetching top artists...");
 
-        fetch('https://api.spotify.com/v1/me/top/artists?limit=5', {
+        fetch(`https://api.spotify.com/v1/me/top/artists?limit=5&time_range=${timeRange}`, {
           headers: {
             'Authorization': `Bearer ${token}`
           }
@@ -76,7 +78,8 @@ export default function Home() {
 
       function getTopTracks() {
         console.log("Fetching top tracks...");
-        fetch('https://api.spotify.com/v1/me/top/tracks?limit=5', {
+        fetch(`https://api.spotify.com/v1/me/top/tracks?limit=5&time_range=${timeRange}`, {
+
           headers: {
             'Authorization': `Bearer ${token}`
           }
@@ -110,15 +113,6 @@ export default function Home() {
       }
 
 
-      
-  
-
-
-
-
-      
-
-
       if (!token) {
         // Token is not available, handle this case
         console.error('Token not available. Redirecting to login...');
@@ -128,7 +122,7 @@ export default function Home() {
           getTopTracks(token); // Fetch top tracks
         } 
 
-  }, []);
+  }, [token, timeRange]);
   
 
  
@@ -203,6 +197,11 @@ const handleDisplayPopularity = () => {
     setSelectedTrack(track);
   };
 
+  const handleTimeRangeChange = (event) => {
+    const selectedTimeRange = event.target.value;
+    setTimeRange(selectedTimeRange);
+  };
+
 
 
 
@@ -231,6 +230,13 @@ return (
     <Header />
     <div className="center">
     </div>
+
+    <label>Select time range:</label>
+      <select onChange={handleTimeRangeChange} value={timeRange}>
+        <option value="short_term">Short Term</option>
+        <option value="medium_term">Medium Term</option>
+        <option value="long_term">Long Term</option>
+      </select>
 
    
 
