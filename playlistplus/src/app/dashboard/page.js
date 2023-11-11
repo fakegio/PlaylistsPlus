@@ -266,6 +266,9 @@ return (
                 />
               )}
               <div className="artist-name">{artist.name}</div>
+              <div className="artist-genres">
+                Genres: {artist.genres.join(', ')}
+              </div>      
             </div>
           ))}
         </div>
