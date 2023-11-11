@@ -23,6 +23,9 @@ export default function Home() {
   const [selectedTrackPopularity, setSelectedTrackPopularity] = useState(null);
   const [timeRange, setTimeRange] = useState('short_term'); // Default time range is 'short_term'
 
+  const [relatedArtists, setRelatedArtists] = useState([]);
+
+
 
  
 
@@ -122,7 +125,29 @@ export default function Home() {
           getTopTracks(token); // Fetch top tracks
         } 
 
-  }, [token, timeRange]);
+      
+        if (selectedArtist) {
+          // Fetch related artists when the selected artist changes
+          fetch(`https://api.spotify.com/v1/artists/${selectedArtist.id}/related-artists`, {
+            headers: {
+              'Authorization': `Bearer ${token}`
+            }
+          })
+          .then(response => {
+            if (!response.ok) {
+              throw new Error(`HTTP status ${response.status}`);
+            }
+            return response.json();
+          })
+          .then(data => {
+            setRelatedArtists(data.artists.slice(0, 5)); // Limit to 5 related artists
+          })
+          .catch(error => {
+            console.error("Error getting related artists:", error);
+          });
+        }
+
+  }, [token, timeRange, selectedArtist]);
   
 
  
@@ -202,7 +227,10 @@ const handleDisplayPopularity = () => {
     setTimeRange(selectedTimeRange);
   };
 
-
+  const handleDisplayRelatedArtists = () => {
+    // Display related artists
+    console.log("Related Artists:", relatedArtists.map(artist => artist.name));
+  };
 
 
   
@@ -316,12 +344,37 @@ return (
             Display Popularity
           </button>
 
+          <button onClick={handleDisplayRelatedArtists} className="button">
+          Display Related Artists
+        </button>
+
+
+
+
           {selectedArtistPopularity !== null && (
             <div>
               <h3>{selectedArtist.name}'s Popularity:</h3>
               <p>{selectedArtistPopularity}</p>
             </div>
           )}
+
+{relatedArtists.length > 0 && (
+          <div>
+            <h3>Related Artists:</h3>
+            <ul>
+              {relatedArtists.map(artist => (
+                <li key={artist.id}>{artist.name}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+          
+
+
+          
+
+
         </div>
 
 
