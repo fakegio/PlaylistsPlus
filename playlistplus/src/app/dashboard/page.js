@@ -283,174 +283,207 @@ const handleDisplayPopularity = () => {
 
 
 
-return (
-  <div className="app">
-    <Sidebar /> {/* Include the Sidebar component here */}
-    <Header />
-    <div className="center">
-    </div>
-
-    <label>Select time range:</label>
-      <select onChange={handleTimeRangeChange} value={timeRange}>
-        <option value="short_term">Short Term</option>
-        <option value="medium_term">Medium Term</option>
-        <option value="long_term">Long Term</option>
-      </select>
-
-   
-
-
-
-
-
-    
-    <div className="button-container">
-      <button className="button">Mood Sync</button>
-      <button className="button">Playlist Generator</button>
-      <button className="button">Joint Playlist</button>
-      <button className="button">Liked/Dislike Songs</button>
-    </div>
-   
-
-    <div className="right-content">
-      <div className="top-artists textbox"> Top Artists</div>
-      <div className="artist-images-container">
-          {topArtists.map((artist) => (
-            <div key={artist.id} className="artist-image-container">
-              {artist.images.length > 0 && (
-                <img
-                  src={artist.images[0].url}
-                  alt={artist.name}
-                  className="artist-image"
-                />
-              )}
-              <div className="artist-name">{artist.name}</div>
-              
-            </div>
-          ))}
-        </div>
-
-
-
-
-      
-
-    
-
-
-<div className="top-genres textbox">Top Tracks</div>
-<div className="track-list">
-  {topTracks.map((track) => (
-    <div key={track.id} className="track-container">
-      {track.album.images.length > 0 && (
-        <img
-          src={track.album.images[0].url}
-          alt={track.name}
-          className="track-image"
-        />
-      )}
-      <div className="track-details">
-        <div className="track-name">{track.name}</div>
-        <div className="track-artists">
-          {track.artists.map((artist) => artist.name).join(", ")}
-        </div>
+  return (
+    <div className="app">
+      <Sidebar /> {/* Include the Sidebar component here */}
+      <Header />
+     
+  
+  
+        <div className="button-container">
+        <button className="button">Mood Sync</button>
+        <button className="button">Playlist Generator</button>
+        <button className="button">Joint Playlist</button>
+        <button className="button">Liked/Dislike Songs</button>
+        <label>Select time range:</label>
+        <select onChange={handleTimeRangeChange} value={timeRange}>
+          <option value="short_term">Short Term</option>
+          <option value="medium_term">Medium Term</option>
+          <option value="long_term">Long Term</option>
+        </select>
       </div>
-    </div>
-        ))}
-     </div>
-
-     <div>
-          <label>Select an artist:</label>
-          <select onChange={handleArtistChange}>
-            <option value="">-- Select an artist --</option>
+  
+  
+  
+  
+      <div className="center">
+  
+  
+      <div className="left-content">
+        <div className="top-artists textbox"> Top Artists</div>
+        <div className="artist-images-container">
             {topArtists.map((artist) => (
-              <option key={artist.id} value={artist.id}>
-                {artist.name}
-              </option>
+              <div key={artist.id} className="artist-image-container">
+                {artist.images.length > 0 && (
+                  <img
+                    src={artist.images[0].url}
+                    alt={artist.name}
+                    className="artist-image"
+                  />
+                )}
+                <div className="artist-name">{artist.name}</div>
+               
+              </div>
             ))}
-          </select>
-          <button onClick={handleDisplayBoth } className="button">
-            Display Popularity
-          </button>
-
-
-
-
-
-          {selectedArtistPopularity !== null && (
-            <div>
-              <h3>{selectedArtist.name}'s Popularity:</h3>
-              <p>{selectedArtistPopularity}</p>
-            </div>
-          )}
-
-        {relatedArtists.length > 0 && (
-          <div>
-            <h3>Related Artists:</h3>
-            <ul>
-              {relatedArtists.map(artist => (
-                <li key={artist.id}>{artist.name}</li>
-              ))}
-            </ul>
           </div>
-        )}
-
-          
-
-
-          
-
-
-        </div>
-
-
-        <div>
-          <label>Select a track:</label>
-          <select onChange={handleTrackChange}>
-            <option value="">-- Select a track --</option>
-            {topTracks.map((track) => (
-              <option key={track.id} value={track.id}>
-                {track.name} by {track.artists.map((artist) => artist.name).join(", ")}
-              </option>
-            ))}
-          </select>
-          <button onClick={handleDisplayPopularity} className="button">
-            Display Popularity
-          </button>
-
-          {selectedTrackPopularity !== null && (
+  
+  
+          <div>
+            <label>Select an artist:</label>
+            <select onChange={handleArtistChange}>
+              <option value="">-- Select an artist --</option>
+              {topArtists.map((artist) => (
+                <option key={artist.id} value={artist.id}>
+                  {artist.name}
+                </option>
+              ))}
+            </select>
+            <button onClick={handleDisplayBoth } className="button">
+              Display Popularity
+            </button>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+            {selectedArtistPopularity !== null && (
+              <div>
+                <h3>{selectedArtist.name}'s Popularity:</h3>
+                <p>{selectedArtistPopularity}</p>
+              </div>
+            )}
+  
+  
+          {relatedArtists.length > 0 && (
             <div>
-              <h3>Selected Track's Popularity:</h3>
-              <p>{selectedTrackPopularity}</p>
+              <h3>Related Artists:</h3>
+              <ul>
+                {relatedArtists.map(artist => (
+                  <li key={artist.id}>{artist.name}</li>
+                ))}
+              </ul>
             </div>
           )}
+  
+  
+          </div>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+       
+  
+  
+  
+  
+     
+  
+  
+  
+  
+  
+  
         </div>
-
-
-        <div className="recently-played textbox">Recently Played Tracks</div>
-<div className="track-list">
-  {recentlyPlayed.slice(0, 5).map(item => (
-    <div key={item.track.id} className="track-container">
-      {item.track.album.images.length > 0 && (
-        <img
-          src={item.track.album.images[0].url}
-          alt={item.track.name}
-          className="track-image"
-        />
-      )}
-      <div className="track-details">
-        <div className="track-name">{item.track.name}</div>
-        <div className="track-artists">
-          {item.track.artists.map(artist => artist.name).join(", ")}
+  
+  
+        <div className="right-content">
+        <div className="top-genres textbox">Top Tracks</div>
+  <div className="track-list">
+    {topTracks.map((track) => (
+      <div key={track.id} className="track-container">
+        {track.album.images.length > 0 && (
+          <img
+            src={track.album.images[0].url}
+            alt={track.name}
+            className="track-image"
+          />
+        )}
+        <div className="track-details">
+          <div className="track-name">{track.name}</div>
+          <div className="track-artists">
+            {track.artists.map((artist) => artist.name).join(", ")}
+          </div>
         </div>
       </div>
-    </div>
-  ))}
-</div>
-
-
-
+          ))}
+       </div>
+  
+  
+       
+  
+  
+  
+  
+          <div>
+            <label>Select a track:</label>
+            <select onChange={handleTrackChange}>
+              <option value="">-- Select a track --</option>
+              {topTracks.map((track) => (
+                <option key={track.id} value={track.id}>
+                  {track.name} by {track.artists.map((artist) => artist.name).join(", ")}
+                </option>
+              ))}
+            </select>
+            <button onClick={handleDisplayPopularity} className="button">
+              Display Popularity
+            </button>
+  
+  
+            {selectedTrackPopularity !== null && (
+              <div>
+                <h3>Selected Track's Popularity:</h3>
+                <p>{selectedTrackPopularity}</p>
+              </div>
+            )}
+          </div>
+  
+  
+  
+  
+  
+  
+        <div className="recently-played textbox"> Recent Tracks</div>
+  <div className="track-list">
+    {recentlyPlayed.slice(0, 5).map(item => (
+      <div key={item.track.id} className="track-container">
+        {item.track.album.images.length > 0 && (
+          <img
+            src={item.track.album.images[0].url}
+            alt={item.track.name}
+            className="track-image"
+          />
+        )}
+        <div className="track-details">
+          <div className="track-name">{item.track.name}</div>
+          <div className="track-artists">
+            {item.track.artists.map(artist => artist.name).join(", ")}
+          </div>
+        </div>
       </div>
-    </div>
-);
-}
+    ))}
+  </div>
+      </div>
+      </div>
+  
+  
+     
+  
+  
+  
+  
+  
+  
+      </div>
+  );
+        }
