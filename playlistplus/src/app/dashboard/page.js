@@ -25,6 +25,9 @@ export default function Home() {
 
   const [relatedArtists, setRelatedArtists] = useState([]);
 
+  const [recentlyPlayed, setRecentlyPlayed] = useState([]);
+
+
 
 
  
@@ -115,6 +118,33 @@ export default function Home() {
         });
       }
 
+      function getRecentlyPlayed() {
+        console.log("Fetching recently played tracks...");
+  
+        fetch('https://api.spotify.com/v1/me/player/recently-played', {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        })
+          .then(response => {
+            if (!response.ok) {
+              throw new Error(`HTTP status ${response.status}`);
+            }
+            return response.json();
+          })
+          .then(data => {
+            console.log("Recently played data:", data);
+            setRecentlyPlayed(data.items);
+          })
+          .catch(error => {
+            console.error("Error getting recently played tracks:", error);
+            if (error.response) {
+              error.response.text().then(text => console.error("Response content:", text));
+            }
+            setRecentlyPlayed([]);
+          });
+      }
+
 
       if (!token) {
         // Token is not available, handle this case
@@ -123,6 +153,7 @@ export default function Home() {
       else{
           getTopArtists(token); // Fetch top artists
           getTopTracks(token); // Fetch top tracks
+          getRecentlyPlayed(); // Fetch recently played tracks
         } 
 
       
@@ -358,7 +389,7 @@ return (
             </div>
           )}
 
-{relatedArtists.length > 0 && (
+        {relatedArtists.length > 0 && (
           <div>
             <h3>Related Artists:</h3>
             <ul>
@@ -399,6 +430,28 @@ return (
             </div>
           )}
         </div>
+
+
+        <div className="recently-played textbox">Recently Played Tracks</div>
+<div className="track-list">
+  {recentlyPlayed.slice(0, 5).map(item => (
+    <div key={item.track.id} className="track-container">
+      {item.track.album.images.length > 0 && (
+        <img
+          src={item.track.album.images[0].url}
+          alt={item.track.name}
+          className="track-image"
+        />
+      )}
+      <div className="track-details">
+        <div className="track-name">{item.track.name}</div>
+        <div className="track-artists">
+          {item.track.artists.map(artist => artist.name).join(", ")}
+        </div>
+      </div>
+    </div>
+  ))}
+</div>
 
 
 
