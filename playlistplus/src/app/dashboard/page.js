@@ -4,6 +4,12 @@ import React, { useState, useEffect } from 'react';
 import './App.css';
 import Header from "./Header";
 import Sidebar from './Sidebar'; 
+import Slider from '@mui/material/Slider';
+
+//npm install @mui/material
+//npm install @emotion/react
+//npm install @emotion/styled
+
 
 
 
@@ -27,6 +33,8 @@ export default function Home() {
 
   const [recentlyPlayed, setRecentlyPlayed] = useState([]);
   const [displayRelatedArtists, setDisplayRelatedArtists] = useState(false);
+  const [popularity, setPopularity] = useState(100); // Set a default value for popularity
+
 
 
 
@@ -42,43 +50,45 @@ export default function Home() {
     console.log(token);
 
 
-      function getTopArtists() {
-      
-        console.log("Fetching top artists...");
+    function getTopArtists() {
+      console.log("Fetching top artists...");
 
-        fetch(`https://api.spotify.com/v1/me/top/artists?limit=5&time_range=${timeRange}`, {
-          headers: {
-            'Authorization': `Bearer ${token}`
+      // Include the popularity filter in the API call
+      fetch(`https://api.spotify.com/v1/me/top/artists?limit=20&time_range=${timeRange}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      })
+      .then(response => {
+        if (!response.ok) {
+          if (response.status === 429) {
+            const retryAfter = response.headers.get('Retry-After');
+            console.log(`Rate limited. Retry after ${retryAfter} seconds.`);
+            // Implement logic to wait for the specified time before retrying.
+          } else if (response.status === 403) {
+            console.log("Forbidden. Check if the access token has the right scopes.");
+          } else {
+            throw new Error(`HTTP status ${response.status}`);
           }
-        })
-        .then(response => {
-          if (!response.ok) {
-            if (response.status === 429) {
-              const retryAfter = response.headers.get('Retry-After');
-              console.log(`Rate limited. Retry after ${retryAfter} seconds.`);
-              // Implement logic to wait for the specified time before retrying.
-            } else if (response.status === 403) {
-              console.log("Forbidden. Check if the access token has the right scopes.");
-            } else {
-              throw new Error(`HTTP status ${response.status}`);
-            }
-          }
-          return response.json();
-        })
-        .then(data => {
-          console.log("Top artists data:", data);
-          setTopArtists(data.items);
-        })
-        .catch(error => {
-          console.error("Error getting top artists:", error);
-          if (error.response) {
-            // Log the response content when there's an error
-            error.response.text().then(text => console.error("Response content:", text));
-          }
+        }
+        return response.json();
+      })
+      .then(data => {
+        // Filter the artists based on the selected popularity
+        const filteredArtists = data.items.filter(artist => artist.popularity <= popularity);
+        setTopArtists(filteredArtists);
+      })
+      .catch(error => {
+        console.error("Error getting top artists:", error);
+        if (error.response) {
+          // Log the response content when there's an error
+          error.response.text().then(text => console.error("Response content:", text));
+        }
 
-          setTopArtists([]);
-        });
-      }
+        setTopArtists([]);
+      });
+    }
+
    
 
 
@@ -182,7 +192,7 @@ export default function Home() {
       
        
 
-  }, [token, timeRange, selectedArtist]);
+  }, [token, timeRange, selectedArtist,popularity]);
   
 
  
@@ -233,28 +243,30 @@ export default function Home() {
 
 
 
-const handleDisplayPopularity = () => {
-  // Check if an artist is selected
-  if (selectedArtist) {
-    // Display the popularity of the selected artist
-    setSelectedArtistPopularity(selectedArtist.popularity);
-  }
-  if (selectedTrack){
-    setSelectedTrackPopularity(selectedTrack.popularity);
-  }
-};
+  const handleDisplayPopularity = () => {
+    // Check if an artist is selected
+    if (selectedArtist) {
+      // Display the popularity of the selected artist
+      setSelectedArtistPopularity(popularity !== null ? popularity : selectedArtist.popularity);
+    }
+    if (selectedTrack) {
+      setSelectedTrackPopularity(popularity !== null ? popularity : selectedTrack.popularity);
+    }
+  };
 
 
   const handleArtistChange = (event) => {
     const selectedArtistId = event.target.value;
     const artist = topArtists.find((a) => a.id === selectedArtistId);
     setSelectedArtist(artist);
+    setPopularity(artist ? artist.popularity : null); // Update popularity when artist changes
   };
 
   const handleTrackChange = (event) => {
     const selectedTrackId = event.target.value;
     const track = topTracks.find((a) => a.id === selectedTrackId);
     setSelectedTrack(track);
+    setPopularity(track ? track.popularity : null); // Update popularity when track changes
   };
 
   const handleTimeRangeChange = (event) => {
@@ -305,6 +317,18 @@ const handleDisplayPopularity = () => {
           <option value="long_term">Long Term</option>
         </select>
       </div>
+
+      <div>
+  <label>Popularity: {popularity}</label>
+  <Slider
+    value={popularity}
+    onChange={(event, newValue) => setPopularity(newValue)}
+    min={0}
+    max={100}
+    step={1}
+    valueLabelDisplay="auto"
+  />
+</div>
   
   
   
@@ -315,7 +339,7 @@ const handleDisplayPopularity = () => {
       <div className="left-content">
         <div className="top-artists textbox"> Top Artists</div>
         <div className="artist-images-container">
-            {topArtists.map((artist) => (
+        {topArtists.slice(0, 5).map((artist) => (
               <div key={artist.id} className="artist-image-container">
                 {artist.images.length > 0 && (
                   <img
