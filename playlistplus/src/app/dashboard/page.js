@@ -96,7 +96,7 @@ export default function Home() {
 
       function getTopTracks() {
         console.log("Fetching top tracks...");
-        fetch(`https://api.spotify.com/v1/me/top/tracks?limit=5&time_range=${timeRange}`, {
+        fetch(`https://api.spotify.com/v1/me/top/tracks?limit=20&time_range=${timeRange}`, {
 
           headers: {
             'Authorization': `Bearer ${token}`
@@ -423,8 +423,11 @@ export default function Home() {
   
         <div className="right-content">
         <div className="top-genres textbox">Top Tracks</div>
-  <div className="track-list">
-    {topTracks.map((track) => (
+        <div className="track-list">
+  {topTracks
+    .filter((track) => track.popularity <= popularity)
+    .slice(0, 5)
+    .map((track) => (
       <div key={track.id} className="track-container">
         {track.album.images.length > 0 && (
           <img
@@ -440,8 +443,8 @@ export default function Home() {
           </div>
         </div>
       </div>
-          ))}
-       </div>
+    ))}
+</div>
   
   
        
