@@ -158,6 +158,27 @@ export default function Home() {
           getRecentlyPlayed(); // Fetch recently played tracks
         } 
 
+        if (selectedArtist) {
+          // Fetch related artists when the selected artist changes
+          fetch(`https://api.spotify.com/v1/artists/${selectedArtist.id}/related-artists`, {
+            headers: {
+              'Authorization': `Bearer ${token}`
+            }
+          })
+          .then(response => {
+            if (!response.ok) {
+              throw new Error(`HTTP status ${response.status}`);
+            }
+            return response.json();
+          })
+          .then(data => {
+            setRelatedArtists(data.artists.slice(0, 5)); // Limit to 5 related artists
+          })
+          .catch(error => {
+            console.error("Error getting related artists:", error);
+          });
+        }
+
       
        
 
@@ -244,30 +265,12 @@ const handleDisplayPopularity = () => {
  
 
   const handleDisplayRelatedArtists = () => {
-    setDisplayRelatedArtists(true);
-    if (selectedArtist) {
-      fetch(`https://api.spotify.com/v1/artists/${selectedArtist.id}/related-artists`, {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      })
-        .then(response => response.json())
-        .then(data => {
-          setRelatedArtists(data.artists.slice(0, 5)); // Limit to 5 related artists
-        })
-        .catch(error => {
-          console.error("Error getting related artists:", error);
-        });
-    }
+    // Display related artists
+    console.log("Related Artists:", relatedArtists.map(artist => artist.name));
   };
 
 
-  const handleDisplayBoth = () => {
-    handleDisplayPopularity();
-    handleDisplayRelatedArtists();
-  };
 
-  
   
 
   
@@ -329,49 +332,46 @@ const handleDisplayPopularity = () => {
   
   
           <div>
-            <label>Select an artist:</label>
-            <select onChange={handleArtistChange}>
-              <option value="">-- Select an artist --</option>
-              {topArtists.map((artist) => (
-                <option key={artist.id} value={artist.id}>
-                  {artist.name}
-                </option>
-              ))}
-            </select>
-            <button onClick={handleDisplayBoth } className="button">
-              Display Popularity
-            </button>
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-            {selectedArtistPopularity !== null && (
-              <div>
-                <h3>{selectedArtist.name}'s Popularity:</h3>
-                <p>{selectedArtistPopularity}</p>
-              </div>
-            )}
-  
-  
-          {relatedArtists.length > 0 && (
+          <label>Select an artist:</label>
+          <select onChange={handleArtistChange}>
+            <option value="">-- Select an artist --</option>
+            {topArtists.map((artist) => (
+              <option key={artist.id} value={artist.id}>
+                {artist.name}
+              </option>
+            ))}
+          </select>
+          <button onClick={handleDisplayPopularity} className="button">
+            Display Popularity
+          </button>
+
+          <button onClick={handleDisplayRelatedArtists} className="button">
+          Display Related Artists
+        </button>
+
+
+
+
+          {selectedArtistPopularity !== null && (
             <div>
-              <h3>Related Artists:</h3>
-              <ul>
-                {relatedArtists.map(artist => (
-                  <li key={artist.id}>{artist.name}</li>
-                ))}
-              </ul>
+              <h3>{selectedArtist.name}'s Popularity:</h3>
+              <p>{selectedArtistPopularity}</p>
             </div>
           )}
-  
-  
+
+        {relatedArtists.length > 0 && (
+          <div>
+            <h3>Related Artists:</h3>
+            <ul>
+              {relatedArtists.map(artist => (
+                <li key={artist.id}>{artist.name}</li>
+              ))}
+            </ul>
           </div>
+        )}
+
+        
+        </div>
   
   
   
