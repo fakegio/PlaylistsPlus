@@ -35,7 +35,36 @@ export default function PlaylistResults() {
     setSelectedTrack(track);
   };
 
-  const handleDislike = (trackId: string) => {
+  const handleDislikeArtist = (trackId: string, artistID: string) => {
+    // Retrieve the value from session storage, considering it could be null
+    let storedValue: string | null = sessionStorage.getItem("dislikedArtists");
+    if (storedValue) {
+      let parsedArray: string[] = JSON.parse(storedValue);
+      parsedArray.push(artistID);
+      sessionStorage.setItem("dislikedArtists", JSON.stringify(parsedArray));
+    } else {
+      let newArray: string[] = [artistID];
+      sessionStorage.setItem("dislikedArtists", JSON.stringify(newArray));
+    }
+
+    setTracks((prevTracks) =>
+      prevTracks ? prevTracks.filter((track) => track.id !== trackId) : null
+    );
+    const data = [title, tracks];
+    const dataString = JSON.stringify(data);
+    sessionStorage.setItem("PlaylistData", dataString);
+  };
+
+  const handleDislikeTrack = (trackId: string) => {
+    let storedValue: string | null = sessionStorage.getItem("dislikedTracks");
+    if (storedValue) {
+      let parsedArray: string[] = JSON.parse(storedValue);
+      parsedArray.push(trackId);
+      sessionStorage.setItem("dislikedTracks", JSON.stringify(parsedArray));
+    } else {
+      let newArray: string[] = [trackId];
+      sessionStorage.setItem("dislikedTracks", JSON.stringify(newArray));
+    }
     setTracks((prevTracks) =>
       prevTracks ? prevTracks.filter((track) => track.id !== trackId) : null
     );
@@ -133,7 +162,8 @@ export default function PlaylistResults() {
                 trackInfo={track}
                 selectedTrack={selectedTrack}
                 handleMenuClick={handleMenuClick}
-                handleDislike={handleDislike}
+                handleDislikeArtist={handleDislikeArtist}
+                handleDislikeTrack={handleDislikeTrack}
               />
             ))
           ) : (

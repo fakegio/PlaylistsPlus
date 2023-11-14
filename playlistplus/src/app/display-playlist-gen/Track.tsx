@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 export interface TrackInfo {
   name: string;
   id: string;
@@ -7,6 +5,7 @@ export interface TrackInfo {
   album: {
     artists: {
       name: string;
+      id: string;
     }[];
     images: {
       url: string;
@@ -18,25 +17,33 @@ type Props = {
   selectedTrack: TrackInfo | null;
   trackInfo: TrackInfo;
   handleMenuClick: (track: TrackInfo) => void;
-  handleDislike: (trackid: string) => void;
+  handleDislikeArtist: (trackid: string, artistID: string) => void;
+  handleDislikeTrack: (trackid: string) => void;
 };
 
 export function Track({
   selectedTrack,
   trackInfo,
   handleMenuClick,
-  handleDislike,
+  handleDislikeArtist,
+  handleDislikeTrack,
 }: Props) {
   const trackName = trackInfo.name;
   const albumProperties = trackInfo.album;
   const artist = albumProperties.artists[0].name;
+  const artistID = albumProperties.artists[0].id;
   const image = albumProperties.images[0].url;
 
   const isMenuVisible = selectedTrack?.id === trackInfo.id;
 
-  const handleDislikeClick = (e: React.MouseEvent) => {
+  const handleDislikeClickArtist = (e: React.MouseEvent) => {
     e.stopPropagation();
-    handleDislike(trackInfo.id);
+    handleDislikeArtist(trackInfo.id, artistID);
+  };
+
+  const handleDislikeClickTrack = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    handleDislikeTrack(trackInfo.id);
   };
 
   return (
@@ -55,8 +62,8 @@ export function Track({
         </div>
         {isMenuVisible ? (
           <div className="flex flex-col font-light bg-black text-white text-sm rounded-md mr-3 p-2">
-            <button onClick={handleDislikeClick}>Dislike artist</button>
-            <button onClick={handleDislikeClick}>Dislike song</button>
+            <button onClick={handleDislikeClickArtist}>Dislike artist</button>
+            <button onClick={handleDislikeClickTrack}>Dislike song</button>
           </div>
         ) : (
           <span

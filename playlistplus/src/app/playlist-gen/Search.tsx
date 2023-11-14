@@ -2,6 +2,7 @@ import { ChangeEvent, useEffect, useState } from "react";
 //Interfaces so I can filter out compilation tracks
 interface Artist {
   name: string;
+  id: string;
 }
 
 interface Track {
@@ -9,6 +10,7 @@ interface Track {
     album_type: string;
   };
   artists: Array<Artist>;
+  id: string;
 }
 
 interface TrackObj {
@@ -22,6 +24,7 @@ export function Search({ typeOfPlaylist }: { typeOfPlaylist: string }) {
   const [results, setResults] = useState<Array<{ name: string; id: string }>>(
     []
   );
+  //available genres on Spotify
   const genreSeeds: string[] = [
     "acoustic",
     "afrobeat",
@@ -104,7 +107,6 @@ export function Search({ typeOfPlaylist }: { typeOfPlaylist: string }) {
     "movies",
     "mpb",
     "new-age",
-    "new-release",
     "opera",
     "pagode",
     "party",
@@ -135,7 +137,6 @@ export function Search({ typeOfPlaylist }: { typeOfPlaylist: string }) {
     "singer-songwriter",
     "ska",
     "sleep",
-    "songwriter",
     "soul",
     "soundtracks",
     "spanish",
@@ -148,16 +149,51 @@ export function Search({ typeOfPlaylist }: { typeOfPlaylist: string }) {
     "trance",
     "trip-hop",
     "turkish",
-    "work-out",
     "world-music",
   ];
 
+  //retrieves access token upon initial render
   useEffect(() => {
     const storedToken = sessionStorage.getItem("access_token");
     if (storedToken) {
       setToken(storedToken);
     }
   }, []);
+
+  //returns the id of the most recently saved tracks
+  function getRecentlySavedTracks(): Promise<string | void> {
+    return new Promise((resolve, reject) => {
+      if (token) {
+        let queryParameters = {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + token,
+          },
+        };
+
+        let url = "https://api.spotify.com/v1/me/tracks";
+        fetch(url, queryParameters)
+          .then((response) => response.json())
+          .then((data) => {
+            let recentlySavedTrackIDs: string | undefined;
+            if (data["items"]) {
+              const iterations = Math.min(data["items"].length, 4);
+              let ids = [];
+              for (let index = 0; index < iterations; index++) {
+                ids.push(data["items"][index]["track"]["id"]);
+              }
+              recentlySavedTrackIDs = ids.toString();
+            }
+            resolve(recentlySavedTrackIDs); // Resolve the Promise with recentlySavedTrackID
+          })
+          .catch((error) => {
+            console.error("Error fetching data:", error);
+            reject(error);
+          });
+      }
+    });
+  }
 
   //When the search bar changes, searches the Spotify database as long as the term being searched for is not a genre type
   const handleInputChange = async (e: ChangeEvent<HTMLInputElement>) => {
@@ -191,22 +227,68 @@ export function Search({ typeOfPlaylist }: { typeOfPlaylist: string }) {
     }
   };
 
+  //Removes disliked artists from intial tracks and calls filter tracks
+  function filterArtists(listOfTracks: Track[]) {
+    let removedArtists;
+    let storedDislikedArtists: string | null =
+      sessionStorage.getItem("dislikedArtists");
+    if (storedDislikedArtists) {
+      let parsedArtists: string[] = JSON.parse(storedDislikedArtists);
+      removedArtists = listOfTracks.filter((track) => {
+        return !parsedArtists.includes(track.artists[0].id); // returns artists whose id is not disliked
+      });
+      return filterTracks(removedArtists);
+    } else {
+      return filterTracks(listOfTracks);
+    }
+  }
+
+  //removes disliked tracks from filtered artists
+  function filterTracks(listOfTracks: Track[]) {
+    let removedTracks;
+    let storedDislikedTracks: string | null =
+      sessionStorage.getItem("dislikedTracks");
+
+    if (storedDislikedTracks) {
+      let parsedTracks: string[] = JSON.parse(storedDislikedTracks);
+      removedTracks = listOfTracks.filter((track) => {
+        return !parsedTracks.includes(track.id); // returns tracks whose id is not disliked
+      });
+      return removedTracks;
+    } else {
+      return listOfTracks;
+    }
+  }
+
+  //shuffles array of tracks
+  const shuffle = (array: Track[]) => {
+    return array
+      .map((a) => ({ sort: Math.random(), value: a }))
+      .sort((a, b) => a.sort - b.sort)
+      .map((a) => a.value);
+  };
+
+  //Filters through the recommended tracks and gets rid of compilation tracks and tracks whose artist is the search term
+  //Return a list of 10 track objects
   function filterCompilationAlbums(trackObj: TrackObj) {
     const listOfTracks = trackObj.tracks;
     const filteredTracks = [];
-    let count = 0;
+    let tracksFiltered = 0;
 
-    for (let i = 0; i < listOfTracks.length; i++) {
-      const track = listOfTracks[i];
+    let filteredDislikes = filterArtists(listOfTracks);
+    let shuffledTracks = shuffle(filteredDislikes);
+
+    for (let i = 0; i < shuffledTracks.length; i++) {
+      const track = shuffledTracks[i];
       if (
         track.album.album_type !== "COMPILATION" &&
         track.artists[0].name !== searchTerm
       ) {
         filteredTracks.push(track);
-        count++;
+        tracksFiltered++;
       }
 
-      if (count === 10) {
+      if (tracksFiltered === 10) {
         break; // Stop when you have 10 tracks
       }
     }
@@ -214,56 +296,118 @@ export function Search({ typeOfPlaylist }: { typeOfPlaylist: string }) {
     return filteredTracks;
   }
 
+  //Sends the playlist title and list of tracks to the display page
+  function storeResultsAndRedirect(title: string, data: Track[]) {
+    if (typeof window !== "undefined") {
+      const dataToSend = [title, data];
+      const dataString = JSON.stringify(dataToSend);
+      sessionStorage.setItem("PlaylistData", dataString);
+      window.location.href = `/display-playlist-gen`;
+    }
+  }
+
+  //calls the spotify get recommendations endpoint
+  function getRecommendations() {
+    let playlistTitle = "New Playlist";
+    //not utilizing listening patterns
+    let queryParameters = {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      },
+    };
+
+    let url = "";
+
+    if (typeOfPlaylist === "Genre") {
+      playlistTitle = "Genre Explorer: " + searchTerm;
+      url =
+        "https://api.spotify.com/v1/recommendations?seed_genres=" +
+        searchTerm +
+        "&max_popularity=50&limit=100";
+    } else if (typeOfPlaylist === "Track") {
+      playlistTitle = "Song Roulette: " + searchTerm;
+      url =
+        "https://api.spotify.com/v1/recommendations?seed_tracks=" +
+        searchTermID +
+        "&max_popularity=50&limit=100";
+    } else {
+      playlistTitle = "Artist Spotlight: " + searchTerm;
+      url =
+        "https://api.spotify.com/v1/recommendations?seed_artists=" +
+        searchTermID +
+        "&max_popularity=50&limit=100";
+    }
+    fetch(url, queryParameters)
+      .then((response) => response.json())
+      .then((data) => {
+        const filteredData = filterCompilationAlbums(data);
+        storeResultsAndRedirect(playlistTitle, filteredData);
+      })
+      .catch((error) => console.error("Error fetching data:", error));
+  }
+
+  //calls the spotify get recommendations endpoint with user's recently saved tracks
+  async function getRecommendationsWithSavedTracks() {
+    let playlistTitle = "New Playlist";
+    const recentTrackIDs = await getRecentlySavedTracks();
+    let queryParameters = {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      },
+    };
+
+    let url = "";
+
+    if (typeOfPlaylist === "Genre") {
+      playlistTitle = "Genre Explorer: " + searchTerm;
+      url =
+        "https://api.spotify.com/v1/recommendations?seed_genres=" +
+        searchTerm +
+        "&seed_tracks=" +
+        recentTrackIDs +
+        "&max_popularity=60&target_popularity=30&limit=100";
+    } else if (typeOfPlaylist === "Track") {
+      playlistTitle = "Song Roulette: " + searchTerm;
+      url =
+        "https://api.spotify.com/v1/recommendations?seed_tracks=" +
+        searchTermID +
+        "," +
+        recentTrackIDs +
+        "&max_popularity=60&target_popularity=30&limit=100";
+    } else {
+      playlistTitle = "Artist Spotlight: " + searchTerm;
+      url =
+        "https://api.spotify.com/v1/recommendations?seed_artists=" +
+        searchTermID +
+        "&seed_tracks=" +
+        recentTrackIDs +
+        "&max_popularity=60&target_popularity=30&limit=100";
+    }
+    fetch(url, queryParameters)
+      .then((response) => response.json())
+      .then((data) => {
+        const filteredData = filterCompilationAlbums(data);
+        storeResultsAndRedirect(playlistTitle, filteredData);
+      })
+      .catch((error) => console.error("Error fetching data:", error));
+  }
+
   //Handles form submission
-  const handleSubmit = (e: ChangeEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
     // Handle form submission here, e.g., make API calls, perform data processing, etc.
     let form = e.target as HTMLFormElement;
     let checkboxElement = form.children[2].children[0] as HTMLInputElement;
 
     if (checkboxElement.checked) {
-      let queryParameters = {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + token,
-        },
-      };
-
-      let url = "";
-      let playlistTitle = "New";
-
-      if (typeOfPlaylist === "Genre") {
-        playlistTitle = "Genre Explorer: " + searchTerm;
-        url =
-          "https://api.spotify.com/v1/recommendations?seed_genres=" +
-          searchTerm +
-          "&max_popularity=50&limit=40";
-      } else if (typeOfPlaylist === "Track") {
-        playlistTitle = "Song Roulette: " + searchTerm;
-        url =
-          "https://api.spotify.com/v1/recommendations?seed_tracks=" +
-          searchTermID +
-          "&max_popularity=50&limit=40";
-      } else {
-        playlistTitle = "Artist Spotlight: " + searchTerm;
-        url =
-          "https://api.spotify.com/v1/recommendations?seed_artists=" +
-          searchTermID +
-          "&max_popularity=50&limit=40";
-      }
-      fetch(url, queryParameters)
-        .then((response) => response.json())
-        .then((data) => {
-          const filteredData = filterCompilationAlbums(data);
-          if (typeof window !== "undefined") {
-            const data = [playlistTitle, filteredData];
-            const dataString = JSON.stringify(data);
-            sessionStorage.setItem("PlaylistData", dataString);
-            window.location.href = `/display-playlist-gen`;
-          }
-        })
-        .catch((error) => console.error("Error fetching data:", error));
+      // utilizing listening patterns
+      getRecommendationsWithSavedTracks();
+    } else {
+      getRecommendations();
     }
   };
 
