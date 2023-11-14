@@ -34,6 +34,7 @@ export default function Home() {
   const [recentlyPlayed, setRecentlyPlayed] = useState([]);
   const [displayRelatedArtists, setDisplayRelatedArtists] = useState(false);
   const [popularity, setPopularity] = useState(100); // Set a default value for popularity
+  const [topGenres, setTopGenres] = useState([]);
 
 
 
@@ -158,6 +159,47 @@ export default function Home() {
       }
 
 
+      function getTopGenres() {
+        console.log("Fetching user's top genres...");
+        fetch(`https://api.spotify.com/v1/me/top/artists?time_range=${timeRange}`, {
+
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error(`HTTP status ${response.status}`);
+          }
+          return response.json();
+        })
+        .then(data => {
+          const genres = data.items.reduce((accumulatedGenres, artist) => {
+            return accumulatedGenres.concat(artist.genres);
+          }, []);
+          // Count occurrences of each genre
+          const genreCounts = genres.reduce((acc, genre) => {
+            acc[genre] = (acc[genre] || 0) + 1;
+            return acc;
+          }, {});
+          // Sort genres by count
+          const sortedGenres = Object.keys(genreCounts).sort((a, b) => genreCounts[b] - genreCounts[a]);
+          // Get the top 5 genres
+          const topFiveGenres = sortedGenres.slice(0, 5);
+          setTopGenres(topFiveGenres);
+        })
+        .catch(error => {
+          console.error("Error getting top genres:", error);
+        });
+      }
+
+
+
+
+
+
+
+
       if (!token) {
         // Token is not available, handle this case
         console.error('Token not available. Redirecting to login...');
@@ -166,6 +208,7 @@ export default function Home() {
           getTopArtists(token); // Fetch top artists
           getTopTracks(token); // Fetch top tracks
           getRecentlyPlayed(); // Fetch recently played tracks
+          getTopGenres();
         } 
 
         if (selectedArtist) {
@@ -342,8 +385,9 @@ export default function Home() {
       <div className="left-content">
         <div className="top-artists textbox"> Top Artists</div>
         <div className="artist-images-container">
-        {topArtists.slice(0, 5).map((artist) => (
+        {topArtists.slice(0, 5).map((artist,index) => (
               <div key={artist.id} className="artist-image-container">
+                <span>{index + 1}</span>
                 {artist.images.length > 0 && (
                   <img
                     src={artist.images[0].url}
@@ -407,6 +451,20 @@ export default function Home() {
           </div>
         )}
 
+<div className="top-genres textbox">Top Genres</div>
+{topGenres.length > 0 && (
+
+
+  <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', padding: '10px' }}>
+  {topGenres.map((genre, index) => (
+    <div key={index} style={{ backgroundColor: 'grey', padding: '5px', borderRadius: '5px' }}>{genre}</div>
+  ))}
+</div>
+
+
+
+)}
+
 
 
 
@@ -439,28 +497,52 @@ export default function Home() {
   
         <div className="right-content">
         <div className="top-genres textbox">Top Tracks</div>
-        <div className="track-list">
-  {topTracks
-    .filter((track) => track.popularity <= popularity)
-    .slice(0, 5)
-    .map((track) => (
-      <div key={track.id} className="track-image-container">
-        {track.album.images.length > 0 && (
-          <img
-            src={track.album.images[0].url}
-            alt={track.name}
-            className="track-image"
-          />
-        )}
-        <div className="track-details">
-          <div className="track-name">{track.name}</div>
-          <div className="track-artists">
-            {track.artists.map((artist) => artist.name).join(", ")}
+        <div className="top-tracks-container">
+    <div className="top-tracks-column">
+      {topTracks
+        .filter((track) => track.popularity <= popularity)
+        .slice(0, 3) // Render first half of the tracks
+        .map((track) => (
+          <div key={track.id} className="track-image-container">
+            {track.album.images.length > 0 && (
+              <img
+                src={track.album.images[0].url}
+                alt={track.name}
+                className="track-image"
+              />
+            )}
+            <div className="track-details">
+              <div className="track-name">{track.name}</div>
+              <div className="track-artists">
+                {track.artists.map((artist) => artist.name).join(", ")}
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
-    ))}
-</div>
+        ))}
+    </div>
+    <div className="top-tracks-column">
+      {topTracks
+        .filter((track) => track.popularity <= popularity)
+        .slice(3, 6) // Render the second half of the tracks
+        .map((track) => (
+          <div key={track.id} className="track-image-container">
+            {track.album.images.length > 0 && (
+              <img
+                src={track.album.images[0].url}
+                alt={track.name}
+                className="track-image"
+              />
+            )}
+            <div className="track-details">
+              <div className="track-name">{track.name}</div>
+              <div className="track-artists">
+                {track.artists.map((artist) => artist.name).join(", ")}
+              </div>
+            </div>
+          </div>
+        ))}
+    </div>
+  </div>
   
   
        
@@ -497,25 +579,55 @@ export default function Home() {
   
   
         <div className="recently-played textbox"> Recent Tracks</div>
-  <div className="track-list">
-    {recentlyPlayed.slice(0, 5).map(item => (
-      <div key={item.track.id} className="track-image-container">
-        {item.track.album.images.length > 0 && (
-          <img
-            src={item.track.album.images[0].url}
-            alt={item.track.name}
-            className="track-image"
-          />
-        )}
-        <div className="track-details">
-          <div className="track-name">{item.track.name}</div>
-          <div className="track-artists">
-            {item.track.artists.map(artist => artist.name).join(", ")}
+        <div className="top-tracks-container">
+  <div className="top-tracks-column">
+    {recentlyPlayed
+      .filter((item) => item.track.popularity <= popularity)
+      .slice(0, 3) // Render the first 3 recent tracks in the first column
+      .map((item) => (
+        <div key={item.track.id} className="track-image-container">
+          {item.track.album.images.length > 0 && (
+            <img
+              src={item.track.album.images[0].url}
+              alt={item.track.name}
+              className="track-image"
+            />
+          )}
+          <div className="track-details">
+            <div className="track-name">{item.track.name}</div>
+            <div className="track-artists">
+              {item.track.artists.map((artist) => artist.name).join(", ")}
+            </div>
           </div>
         </div>
-      </div>
-    ))}
+      ))}
   </div>
+  <div className="top-tracks-column">
+    {recentlyPlayed
+      .filter((item) => item.track.popularity <= popularity)
+      .slice(3, 6) // Render the next 3 recent tracks in the second column
+      .map((item) => (
+        <div key={item.track.id} className="track-image-container">
+          {item.track.album.images.length > 0 && (
+            <img
+              src={item.track.album.images[0].url}
+              alt={item.track.name}
+              className="track-image"
+            />
+          )}
+          <div className="track-details">
+            <div className="track-name">{item.track.name}</div>
+            <div className="track-artists">
+              {item.track.artists.map((artist) => artist.name).join(", ")}
+            </div>
+          </div>
+        </div>
+      ))}
+  </div>
+</div>
+
+
+
       </div>
       </div>
   
@@ -529,4 +641,4 @@ export default function Home() {
   
       </div>
   );
-        }
+        }           
