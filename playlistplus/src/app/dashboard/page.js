@@ -245,12 +245,12 @@ export default function Home() {
 
   const handleDisplayPopularity = () => {
     // Check if an artist is selected
-    if (selectedArtist) {
-      // Display the popularity of the selected artist
-      setSelectedArtistPopularity(popularity !== null ? popularity : selectedArtist.popularity);
+    if (selectedArtist && !selectedTrack) {
+      // Display the popularity of the selected artist only if no track is selected
+      setSelectedArtistPopularity(selectedArtist ? selectedArtist.popularity : null);
     }
     if (selectedTrack) {
-      setSelectedTrackPopularity(popularity !== null ? popularity : selectedTrack.popularity);
+      setSelectedTrackPopularity(selectedTrack ? selectedTrack.popularity : null);
     }
   };
 
@@ -259,14 +259,14 @@ export default function Home() {
     const selectedArtistId = event.target.value;
     const artist = topArtists.find((a) => a.id === selectedArtistId);
     setSelectedArtist(artist);
-    setPopularity(artist ? artist.popularity : null); // Update popularity when artist changes
+    //setPopularity(artist ? artist.popularity : null); // Update popularity when artist changes
   };
 
   const handleTrackChange = (event) => {
     const selectedTrackId = event.target.value;
     const track = topTracks.find((a) => a.id === selectedTrackId);
     setSelectedTrack(track);
-    setPopularity(track ? track.popularity : null); // Update popularity when track changes
+    //setPopularity(track ? track.popularity : null); // Update popularity when track changes
   };
 
   const handleTimeRangeChange = (event) => {
@@ -323,6 +323,7 @@ export default function Home() {
   <Slider
     value={popularity}
     onChange={(event, newValue) => setPopularity(newValue)}
+    onMouseUp={handleDisplayPopularity} // Call the display popularity function when slider is released
     min={0}
     max={100}
     step={1}
@@ -383,16 +384,31 @@ export default function Home() {
             </div>
           )}
 
+
+
         {relatedArtists.length > 0 && (
           <div>
-            <h3>Related Artists:</h3>
-            <ul>
-              {relatedArtists.map(artist => (
-                <li key={artist.id}>{artist.name}</li>
+          <h3>Related Artists:</h3>
+          <div className="related-artists-container">
+      {relatedArtists.map(artist => (
+        <div key={artist.id} className="artist-image-container">
+        {artist.images.length > 0 && (
+          <img
+            src={artist.images[0].url}
+            alt={artist.name}
+            className="artist-image"
+          />
+        )}
+        <div className="artist-name">{artist.name}</div>
+       
+      </div>
               ))}
-            </ul>
+            </div>
           </div>
         )}
+
+
+
 
         
         </div>
