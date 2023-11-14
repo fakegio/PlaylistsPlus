@@ -327,6 +327,8 @@ export default function Home() {
     max={100}
     step={1}
     valueLabelDisplay="auto"
+    sx={{ width: '80%', margin: 'auto' }} // Adjust the width and margin as needed
+
   />
 </div>
   
@@ -369,9 +371,7 @@ export default function Home() {
             Display Popularity
           </button>
 
-          <button onClick={handleDisplayRelatedArtists} className="button">
-          Display Related Artists
-        </button>
+          
 
 
 
@@ -428,7 +428,7 @@ export default function Home() {
     .filter((track) => track.popularity <= popularity)
     .slice(0, 5)
     .map((track) => (
-      <div key={track.id} className="track-container">
+      <div key={track.id} className="track-image-container">
         {track.album.images.length > 0 && (
           <img
             src={track.album.images[0].url}
@@ -483,7 +483,7 @@ export default function Home() {
         <div className="recently-played textbox"> Recent Tracks</div>
   <div className="track-list">
     {recentlyPlayed.slice(0, 5).map(item => (
-      <div key={item.track.id} className="track-container">
+      <div key={item.track.id} className="track-image-container">
         {item.track.album.images.length > 0 && (
           <img
             src={item.track.album.images[0].url}
