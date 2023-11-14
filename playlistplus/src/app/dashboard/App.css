@@ -1,0 +1,356 @@
+.App {
+    text-align: center;
+  }
+  
+  .App-logo {
+    height: 40vmin;
+    pointer-events: none;
+  }
+  
+  @media (prefers-reduced-motion: no-preference) {
+    .App-logo {
+      animation: App-logo-spin infinite 20s linear;
+    }
+  }
+  
+  .App-header {
+    background-color: #60646b;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: calc(10px + 2vmin);
+    color: rgb(182, 20, 20);
+  }
+  
+  .App-link {
+    color: #61dafb;
+  }
+  
+  @keyframes App-logo-spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  
+  body {
+    background-color: rgb(70, 70, 70);
+    margin: 0; /* Remove default margin to fill the entire page */
+  }
+  
+  /* */
+  .center {
+    display: flex;
+    /* flex-direction: column; */
+    justify-content: center;
+    align-items: stretch;
+    /* height: 100vh; */
+    margin-top: 1px; 
+  }
+  
+  /* Style the SearchBar */
+  .search-bar {
+    display: flex;
+    align-items: center;
+    background-color: #fff;
+    border: 2px solid green;
+    border-radius: 5px;
+    padding: 5px;
+  }
+  
+  .search-bar input {
+    border: none;
+    outline: none;
+    width: 200px; /* Adjust as needed */
+    padding: 10px;
+  }
+  
+  .search-bar button {
+    background-color: green;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .search-bar button:hover {
+    background-color: darkgreen;
+  }
+  
+  
+  .header {
+    background-color: rgb(0, 0, 0);
+    color: white;
+    padding: 3rem;
+    text-align: center;
+    font-weight: bold;
+    font-size: 3em;
+  }
+  
+  .header-title {
+    margin: 0;
+  }
+  
+  
+  
+  
+  
+  
+  
+  /* jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj*/
+  /* Style the Profile Dropdown Button */
+  .profile-dropdown {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .profile-button {
+    background-color: white;
+    border: none;
+    color: #333; /* Adjust the text color as needed */
+    padding: 10px 15px;
+    cursor: pointer;
+  }
+  
+  .profile-button:hover {
+    background-color: #f0f0f0; /* Change the background color on hover */
+  }
+  
+  /* Style the Dropdown Content */
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: white;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+  }
+  
+  .dropdown-content a {
+    color: #333; /* Adjust the text color as needed */
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+  }
+  
+  .dropdown-content a:hover {
+    background-color: #f0f0f0; /* Change the background color on hover */
+  }
+  
+  /* Show the dropdown when the button is hovered over */
+  .profile-dropdown:hover .dropdown-content {
+    display: block;
+  }
+  
+  
+  
+  
+  
+  
+  
+  
+  /* jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj*/
+  /* Create a left-content section with space between textboxes */
+  
+  
+  .textbox {
+    color: white; /* Set text color to white */
+    background-color: transparent; /* To make the background transparent */
+    padding: 10px;
+    font-weight: bold;
+    margin-bottom: 0px;
+    font-size: 50px; /* Adjust the font size as needed */
+  }
+  
+  .white-text {
+    color: white;
+  }
+
+ /* Style the Sidebar */
+ .sidebar {
+  background: black; /* Adjust the colors as needed */
+  color: white;
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  z-index: 1;
+  width: 220px; /* Adjust the width as needed */
+  padding: 20px 15px; /* Adjust the padding as needed */
+  box-shadow: 0px 0px 10px rgba(29, 28, 28, 0.2);
+
+}
+
+.sidebar-button {
+  background-color: black;
+  border: none;
+  color: white;
+  padding: 12px 16px;
+  cursor: pointer;
+  font-size: 18px;
+  text-align: left;
+  transition: background-color 0.3s;
+}
+
+.sidebar-button:hover {
+  background-color: #444;
+}
+
+/* Style the Button Container */
+.button-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100px; /* Adjust the height as needed */
+}
+
+/* Style the Buttons */
+.button {
+  background-color: grey;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 15px;
+  cursor: pointer;
+  margin: 5px; /* Add spacing between buttons */
+  font-size: 16px;
+  /* Additional styling can be applied */
+}
+
+.button:hover {
+  background-color: green; /* Change the background color on hover */
+}
+
+/* Style the Analytics Header */
+.analytics-header {
+  background-color: #333;
+  color: white;
+  width: 200px;
+  padding: 20px;
+  order: 2; /* Set an order to move it to the right */
+}
+
+
+/* Add these styles to your existing CSS file or component */
+.artist-images-container {
+  display: flex;
+  justify-content: space-between; /* Adjust as needed */
+  align-items: center;
+  flex-wrap: wrap; /* Allow images to wrap to the next line if there's not enough space */
+}
+
+.artist-image-container {
+  text-align: center;
+  margin: 10px; /* Adjust as needed */
+}
+
+.artist-image {
+  width: 80px; /* Adjust the size of the images */
+  height: 80px; /* Adjust the size of the images */
+  border-radius: 50%; /* Make the images circular */
+  margin-right: 0px;
+}
+
+.artist-name {
+  margin-top: 5px; /* Adjust as needed */
+  font-size: 16px; /* Adjust as needed */
+}
+
+.track-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.track-container {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px; /* Adjust the spacing between tracks */
+}
+
+.track-image {
+  width: 80px; /* Adjust the size as needed */
+  height: 80px; /* Adjust the size as needed */
+  border-radius: 50%;
+  margin-right: 10px; /* Adjust the spacing between image and text */
+}
+
+.track-details {
+  text-align: left;
+}
+
+.right-content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  margin-right: 250px; /* Adjust the right margin to provide space */
+  margin-top: 0px;
+}
+
+.left-content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-left: 0; /* Adjust the left margin to provide space */
+  margin-top: 10px; /* Adjust the top margin to provide space */
+  width: calc(100% - 650px); /* Adjust the width to take up the remaining space */
+}
+
+/* Container for artist images */
+
+/* Container for artist images */
+.artist-image-container {
+  background-color: grey; /* Set the background color to grey */
+  border-radius: 8px; /* Rounded corners */
+  overflow: hidden; /* Hide overflow */
+  margin: 20px; /* Adjust margin as needed */
+  height: 170px; /* Set a fixed height for all artist containers */
+  width: 140px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Center vertically */
+  align-items: center; /* Center horizontally */
+}
+
+/* Container for track images */
+.track-image-container {
+  background-color: grey; /* Set the background color to grey */
+  border-radius: 8px; /* Rounded corners */
+  overflow: hidden; /* Hide overflow */
+  margin: 10px; /* Adjust margin as needed */
+  height: 170px; /* Set a fixed height for all track containers */
+  width: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Center vertically */
+  align-items: center; /* Center horizontally */
+}
+
+.related-artists-container {
+  display: flex; /* Ensure related artists are displayed horizontally */
+  justify-content: space-between; /* Adjust alignment as needed */
+  flex-wrap: wrap; /* Wrap content if it exceeds the container width */
+}
+
+.top-tracks-container {
+  display: flex;
+  justify-content: space-between; /* Ensure the columns are spaced apart */
+}
+
+.top-tracks-column {
+  flex: 1; /* Allow each column to take up equal space */
+  /* Define column-specific styles */
+}
+
+.track-image-container {
+  /* Styles for each track */
+  margin-bottom: 20px; /* Add space between tracks */
+}
