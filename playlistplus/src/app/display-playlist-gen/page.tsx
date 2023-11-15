@@ -4,7 +4,6 @@ import "../globals.css";
 import { TrackInfo } from "./Track";
 import { Track } from "./Track";
 
-
 export default function PlaylistResults() {
   const [tracks, setTracks] = useState<TrackInfo[] | null>([]);
   const [title, setTitle] = useState("");
@@ -93,6 +92,7 @@ export default function PlaylistResults() {
         .catch((error) => console.error("Error fetching data:", error));
     }
   }
+
   function getTracksURI() {
     if (tracks) {
       return tracks.map((track) => track.uri);
@@ -100,6 +100,7 @@ export default function PlaylistResults() {
     return [];
   }
 
+  //calls spotify api to create a new playlist
   function createPlaylist(userID: string) {
     if (userID) {
       let queryParameters = {
@@ -126,6 +127,7 @@ export default function PlaylistResults() {
     }
   }
 
+  //calls spotify api to add the tracks to the newly created spotify playlist
   function addToPlaylist(playlistID: string, playlist_link: string) {
     const track_uris = getTracksURI();
     let queryParameters = {
