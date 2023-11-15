@@ -1,103 +1,103 @@
-const CLIENT_ID = "463e8cd3eb06493faf19f84a0afab027"
-const CLIENT_SECRET = "172deb1fdd504a60b84b2efd70c7a5f1"
-const RESPONSE_TYPE = "code"
-const REDIRECT_URI = "http://localhost:3000/"
+const CLIENT_ID = "0a3a9aa50ee94872866a66b6ee57f5b5"; //463e8cd3eb06493faf19f84a0afab027
+const CLIENT_SECRET = "97bca20add9549b287323818e931bbc3"; //172deb1fdd504a60b84b2efd70c7a5f1
+const RESPONSE_TYPE = "code";
+const REDIRECT_URI = "http://localhost:3000/";
 
 function generateRandomString(length: number): string {
-    let text = "";
-    const possible =
-      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-  
-    for (let i = 0; i < length; i++) {
-      text += possible.charAt(Math.floor(Math.random() * possible.length));
-    }
-    return text;
+  let text = "";
+  const possible =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+  for (let i = 0; i < length; i++) {
+    text += possible.charAt(Math.floor(Math.random() * possible.length));
+  }
+  return text;
+}
+
+async function generateCodeChallenge(codeVerifier: string): Promise<string> {
+  function base64encode(string: Uint8Array): string {
+    return btoa(String.fromCharCode.apply(null, Array.from(string)))
+      .replace(/\+/g, "-")
+      .replace(/\//g, "_")
+      .replace(/=+$/, "");
   }
 
-  async function generateCodeChallenge(codeVerifier: string): Promise<string> {
-    function base64encode(string: Uint8Array): string {
-      return btoa(String.fromCharCode.apply(null, Array.from(string)))
-        .replace(/\+/g, "-")
-        .replace(/\//g, "_")
-        .replace(/=+$/, "");
-    }
-  
-    const encoder = new TextEncoder();
-    const data = encoder.encode(codeVerifier);
-    const digest = await window.crypto.subtle.digest("SHA-256", data);
-  
-    return base64encode(new Uint8Array(digest));
-  }
+  const encoder = new TextEncoder();
+  const data = encoder.encode(codeVerifier);
+  const digest = await window.crypto.subtle.digest("SHA-256", data);
 
-  const codeVerifier: string = generateRandomString(128);
+  return base64encode(new Uint8Array(digest));
+}
 
-  let urlParams = new URLSearchParams();
+const codeVerifier: string = generateRandomString(128);
 
-  if (typeof window !== "undefined") {
-    urlParams = new URLSearchParams(window.location.search);
-  }
+let urlParams = new URLSearchParams();
 
-  export const authorize = async () => {
-    generateCodeChallenge(codeVerifier).then((codeChallenge) => {
-      const state: string = generateRandomString(16);
-      const scope: string =
-        "user-read-private user-read-email streaming user-read-playback-state user-modify-playback-state";
-  
-      sessionStorage.setItem("code_verifier", codeVerifier);
-  
-      const args = new URLSearchParams({
-        response_type: "code",
-        client_id: CLIENT_ID,
-        scope: scope,
-        redirect_uri: REDIRECT_URI,
-        state: state,
-        code_challenge_method: "S256",
-        code_challenge: codeChallenge,
-      });
-  
-      window.location.href = "https://accounts.spotify.com/authorize?" + args;
+if (typeof window !== "undefined") {
+  urlParams = new URLSearchParams(window.location.search);
+}
+
+export const authorize = async () => {
+  generateCodeChallenge(codeVerifier).then((codeChallenge) => {
+    const state: string = generateRandomString(16);
+    const scope: string =
+      "user-read-private user-read-email streaming user-read-playback-state user-modify-playback-state playlist-modify-public user-library-read";
+
+    sessionStorage.setItem("code_verifier", codeVerifier);
+
+    const args = new URLSearchParams({
+      response_type: "code",
+      client_id: CLIENT_ID,
+      scope: scope,
+      redirect_uri: REDIRECT_URI,
+      state: state,
+      code_challenge_method: "S256",
+      code_challenge: codeChallenge,
     });
-  };
 
-  export const removeCredentials = async () => {
-    sessionStorage.removeItem("access_token");
-    sessionStorage.removeItem("code_verifier");
-    window.location.href = "/";
-  }
+    window.location.href = "https://accounts.spotify.com/authorize?" + args;
+  });
+};
 
-  export const login = async () => {
-    window.location.href = "/dashboard"
-  }
+export const removeCredentials = async () => {
+  sessionStorage.removeItem("access_token");
+  sessionStorage.removeItem("code_verifier");
+  window.location.href = "/";
+};
 
-  export const getToken = async () => {
-    let codeVerifier = sessionStorage.getItem("code_verifier");
-    let code = urlParams.get("code");
-    let body = new URLSearchParams({
-      grant_type: "authorization_code" || "",
-      code: code || "",
-      redirect_uri: REDIRECT_URI || "",
-      client_id: CLIENT_ID || "",
-      code_verifier: codeVerifier || "",
-    });
-  
-    await fetch("https://accounts.spotify.com/api/token", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-      body: body,
+export const login = async () => {
+  window.location.href = "/dashboard";
+};
+
+export const getToken = async () => {
+  let codeVerifier = sessionStorage.getItem("code_verifier");
+  let code = urlParams.get("code");
+  let body = new URLSearchParams({
+    grant_type: "authorization_code" || "",
+    code: code || "",
+    redirect_uri: REDIRECT_URI || "",
+    client_id: CLIENT_ID || "",
+    code_verifier: codeVerifier || "",
+  });
+
+  await fetch("https://accounts.spotify.com/api/token", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    body: body,
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("HTTP status " + response.status);
+      }
+      return response.json();
     })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("HTTP status " + response.status);
-        }
-        return response.json();
-      })
-      .then((data: { access_token: string }) => {
-        sessionStorage.setItem("access_token", data.access_token);
-        login();
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
-  };
+    .then((data: { access_token: string }) => {
+      sessionStorage.setItem("access_token", data.access_token);
+      login();
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+    });
+};
