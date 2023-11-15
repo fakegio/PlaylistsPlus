@@ -1,5 +1,5 @@
-const CLIENT_ID = "0a3a9aa50ee94872866a66b6ee57f5b5"; //463e8cd3eb06493faf19f84a0afab027
-const CLIENT_SECRET = "97bca20add9549b287323818e931bbc3"; //172deb1fdd504a60b84b2efd70c7a5f1
+const CLIENT_ID = process.env.NEXT_PUBLIC_CLIENT_ID;
+const CLIENT_SECRET = process.env.NEXT_PUBLIC_CLIENT_SECRET;
 const RESPONSE_TYPE = "code";
 const REDIRECT_URI = "http://localhost:3000/";
 
@@ -41,15 +41,15 @@ export const authorize = async () => {
   generateCodeChallenge(codeVerifier).then((codeChallenge) => {
     const state: string = generateRandomString(16);
     const scope: string =
-      "user-read-private user-read-email streaming user-read-playback-state user-modify-playback-state playlist-modify-public user-library-read";
+        "user-read-private user-read-email streaming user-read-playback-state user-modify-playback-state user-top-read user-library-read user-read-recently-played playlist-read-private playlist-read-collaborative";
 
     sessionStorage.setItem("code_verifier", codeVerifier);
 
     const args = new URLSearchParams({
       response_type: "code",
-      client_id: CLIENT_ID,
+      client_id: CLIENT_ID || "",
       scope: scope,
-      redirect_uri: REDIRECT_URI,
+      redirect_uri: REDIRECT_URI || "",
       state: state,
       code_challenge_method: "S256",
       code_challenge: codeChallenge,

@@ -464,7 +464,7 @@ export function Search({ typeOfPlaylist }: { typeOfPlaylist: string }) {
         className="flex flex-col gap-3"
       >
         <input
-          className="bg-white rounded-md"
+          className="bg-white rounded-md text-black"
           type="text"
           name="text"
           id="text"
