@@ -1,5 +1,5 @@
 .header {
-    background-color: #00c244;
+    background-color: #322D2D;
     color: #fff;
     padding: 30rem;
     text-align: center;
@@ -9,3 +9,11 @@
   .header h1 {
     margin: 0;
   }
+
+  .goToSpotify img {
+    /* fix to be always on the right side of the screen */
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+  

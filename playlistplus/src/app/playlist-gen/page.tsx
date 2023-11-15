@@ -5,11 +5,14 @@ import "../globals.css";
 export default function Generators() {
   return (
     <>
+    
       <main className="min-h-screen overflow-hidden">
         <h1 className="text-white text-6xl font-semibold text-center pt-10">
           Playlist Generators
         </h1>
-        <div className="flex flex-wrap justify-evenly items-center h-screen overflow-hidden">
+        
+        <div className="flex flex-wrap justify-evenly items-center h-screen overflow-hidden text-black">
+        
           <Generator
             title={"Genre Explorer"}
             content={"Explore new music based on a given genre."}

@@ -3,7 +3,6 @@ import { authorize, getToken, login, removeCredentials } from '@/API/authorize';
 import React, { useState, useEffect } from 'react';
 import './App.css';
 import Header from "./Header";
-import Sidebar from './Sidebar'; 
 import Slider from '@mui/material/Slider';
 
 //npm install @mui/material
@@ -343,14 +342,10 @@ export default function Home() {
 
   return (
     <div className="app">
-      <Sidebar /> {/* Include the Sidebar component here */}
       <Header />
-     
-  
-  
         <div className="button-container">
         <button className="button">Mood Sync</button>
-        <button className="button">Playlist Generator</button>
+        <button className="button"onClick={event =>  window.location.href='/playlist-gen'}>Playlist Generator</button>
         <button className="button">Joint Playlist</button>
         <button className="button">Liked/Dislike Songs</button>
         <label>Select time range:</label>
