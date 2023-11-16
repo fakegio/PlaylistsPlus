@@ -4,14 +4,12 @@ import React, { useState, useEffect } from 'react';
 import './App.css';
 import Header from "./Header";
 import Slider from '@mui/material/Slider';
+import SpotifyPlayer from 'react-spotify-web-playback';
+import { spotifyApi } from 'react-spotify-web-playback';
 
 //npm install @mui/material
 //npm install @emotion/react
 //npm install @emotion/styled
-
-
-
-
 
 export default function Home() {
   const [token, setToken] = useState('');
@@ -323,26 +321,22 @@ export default function Home() {
     console.log("Related Artists:", relatedArtists.map(artist => artist.name));
   };
 
-
-
-  
-
-  
-
-  
-
-
-
-
-
-
-
-
-
-
   return (
     <div className="app">
       <Header />
+      <SpotifyPlayer
+        token={sessionStorage.getItem("access_token")}
+        uris={['spotify:artist:6HQYnRM4OzToCYPpVBInuU']}
+        styles={{
+          activeColor: '#fff',
+          bgColor: '#333',
+          color: '#fff',
+          loaderColor: '#fff',
+          sliderColor: '#1cb954',
+          trackArtistColor: '#ccc',
+          trackNameColor: '#fff',
+        }}
+      />
         <div className="button-container">
         <button className="button">Mood Sync</button>
         <button className="button"onClick={event =>  window.location.href='/playlist-gen'}>Playlist Generator</button>
@@ -370,8 +364,6 @@ export default function Home() {
 
   />
 </div>
-  
-  
   
   
       <div className="center">
@@ -580,7 +572,7 @@ export default function Home() {
       .filter((item) => item.track.popularity <= popularity)
       .slice(0, 3) // Render the first 3 recent tracks in the first column
       .map((item) => (
-        <div key={item.track.id} className="track-image-container">
+        <div key={item.track.id} className="track-image-container" >
           {item.track.album.images.length > 0 && (
             <img
               src={item.track.album.images[0].url}
