@@ -2,6 +2,7 @@ export interface TrackInfo {
   name: string;
   id: string;
   uri: string;
+  popularity: number;
   album: {
     artists: {
       name: string;
@@ -33,6 +34,7 @@ export function Track({
   const artist = albumProperties.artists[0].name;
   const artistID = albumProperties.artists[0].id;
   const image = albumProperties.images[0].url;
+  const popularity = trackInfo.popularity;
 
   const isMenuVisible = selectedTrack?.id === trackInfo.id;
 
@@ -58,6 +60,7 @@ export function Track({
           <div className="flex flex-col justify-evenly ">
             <p className="font-semibold text-black text-xs">{trackName}</p>
             <p className="text-black text-xs">{artist}</p>
+            <p className="text-black text-xs">Popularity: {popularity}</p>
           </div>
         </div>
         {isMenuVisible ? (

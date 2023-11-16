@@ -311,7 +311,7 @@ export function Search({ typeOfPlaylist }: { typeOfPlaylist: string }) {
   }
 
   //calls the spotify get recommendations endpoint
-  function getRecommendations() {
+  function getRecommendations(minPopularity: number, maxPopularity: number) {
     let playlistTitle = "New Playlist";
     //not utilizing listening patterns
     let queryParameters = {
@@ -329,13 +329,17 @@ export function Search({ typeOfPlaylist }: { typeOfPlaylist: string }) {
       url =
         "https://api.spotify.com/v1/recommendations?seed_genres=" +
         searchTerm +
-        "&max_popularity=50&limit=100";
+        "&max_popularity=" + maxPopularity +
+        "&min_popularity=" + minPopularity +
+        "&limit=100";
     } else if (typeOfPlaylist === "Track") {
       playlistTitle = "Song Roulette: " + searchTerm;
       url =
         "https://api.spotify.com/v1/recommendations?seed_tracks=" +
         searchTermID +
-        "&max_popularity=50&limit=100";
+        "&max_popularity=" + maxPopularity +
+        "&min_popularity=" + minPopularity +
+        "&limit=100";
     } else {
       playlistTitle = "Artist Spotlight: " + searchTerm;
       url =
@@ -353,7 +357,7 @@ export function Search({ typeOfPlaylist }: { typeOfPlaylist: string }) {
   }
 
   //calls the spotify get recommendations endpoint with user's recently saved tracks
-  async function getRecommendationsWithSavedTracks() {
+  async function getRecommendationsWithSavedTracks(minPopularity: number, maxPopularity: number) {
     let playlistTitle = "New Playlist";
     const recentTrackIDs = await getRecentlySavedTracks();
     let queryParameters = {
@@ -373,7 +377,9 @@ export function Search({ typeOfPlaylist }: { typeOfPlaylist: string }) {
         searchTerm +
         "&seed_tracks=" +
         recentTrackIDs +
-        "&max_popularity=60&target_popularity=30&limit=100";
+        "&max_popularity=" + maxPopularity +
+        "&min_popularity=" + minPopularity +
+        "&limit=100";
     } else if (typeOfPlaylist === "Track") {
       playlistTitle = "Song Roulette: " + searchTerm;
       url =
@@ -381,7 +387,9 @@ export function Search({ typeOfPlaylist }: { typeOfPlaylist: string }) {
         searchTermID +
         "," +
         recentTrackIDs +
-        "&max_popularity=60&target_popularity=30&limit=100";
+        "&max_popularity=" + maxPopularity +
+        "&min_popularity=" + minPopularity +
+        "&limit=100";
     } else {
       playlistTitle = "Artist Spotlight: " + searchTerm;
       url =
@@ -389,7 +397,9 @@ export function Search({ typeOfPlaylist }: { typeOfPlaylist: string }) {
         searchTermID +
         "&seed_tracks=" +
         recentTrackIDs +
-        "&max_popularity=60&target_popularity=30&limit=100";
+        "&max_popularity=" + maxPopularity +
+        "&min_popularity=" + minPopularity +
+        "&limit=100";
     }
     fetch(url, queryParameters)
       .then((response) => response.json())
@@ -404,14 +414,16 @@ export function Search({ typeOfPlaylist }: { typeOfPlaylist: string }) {
   const handleSubmit = async (e: ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
     // Handle form submission here, e.g., make API calls, perform data processing, etc.
+    const storedMinPopularity = parseInt(localStorage.getItem('minPopularity') || '0');
+    const storedMaxPopularity = parseInt(localStorage.getItem('maxPopularity') || '100');
     let form = e.target as HTMLFormElement;
     let checkboxElement = form.children[2].children[0] as HTMLInputElement;
 
     if (checkboxElement.checked) {
       // utilizing listening patterns
-      getRecommendationsWithSavedTracks();
+      getRecommendationsWithSavedTracks(storedMinPopularity,storedMaxPopularity);
     } else {
-      getRecommendations();
+      getRecommendations(storedMinPopularity,storedMaxPopularity);
     }
   };
 
