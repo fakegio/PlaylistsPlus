@@ -8,9 +8,11 @@ interface Artist {
 interface Track {
   album: {
     album_type: string;
+    name: string;
   };
   artists: Array<Artist>;
   id: string;
+  name: string;
 }
 
 interface TrackObj {
@@ -282,7 +284,9 @@ export function Search({ typeOfPlaylist }: { typeOfPlaylist: string }) {
       const track = shuffledTracks[i];
       if (
         track.album.album_type !== "COMPILATION" &&
-        track.artists[0].name !== searchTerm
+        track.artists[0].name !== searchTerm &&
+        !track.album.name.includes("Remaster") &&
+        !track.name.includes("Remaster")
       ) {
         filteredTracks.push(track);
         tracksFiltered++;
