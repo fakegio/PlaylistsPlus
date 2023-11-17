@@ -26,6 +26,11 @@ pnpm dev
 bun dev
 ```
 
+NOTE: Web Playback only works with users that have a premium Spotify account.
+To use the player, 
+ - log into Playlist+
+ - open Spotify, click devices and then click Spotify Web Player.
+
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 ## Learn More
