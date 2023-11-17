@@ -1,0 +1,11 @@
+.popup-content {
+    color: black;
+    border-color: slategray;
+    border-radius: 2px;
+}
+
+.icons {
+    display: flex;
+    margin: 4px 10px 10px 2px;
+    justify-content: center;
+}
