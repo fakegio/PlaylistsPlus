@@ -5,6 +5,7 @@ import "../globals.css";
 export default function Notifications() {
   const [token, setToken] = useState<string | null>("");
   const [albumList, setAlbumList] = useState<any[] | null>();
+  const [errorMessage, setErrorMessage] = useState<string | null>("");
 
   //retrieves access token upon initial render
   useEffect(() => {
@@ -29,7 +30,17 @@ export default function Notifications() {
       let url = "https://api.spotify.com/v1/me/following?type=artist&limit=50";
 
       fetch(url, queryParameters)
-        .then((response) => response.json())
+        .then((response) => {
+          if (!response.ok) {
+            if (response.status === 429) {
+              const retryAfter = response.headers.get("Retry-After");
+              setErrorMessage(
+                `Rate limited. Retry after ${retryAfter} seconds.`
+              );
+            }
+          }
+          return response.json();
+        })
         .then((data) => {
           let items = data["artists"]["items"];
           items.forEach((item: { id: any }) => {
@@ -62,7 +73,17 @@ export default function Notifications() {
             "/albums?include_groups=album";
 
           fetch(url, queryParameters)
-            .then((response) => response.json())
+            .then((response) => {
+              if (!response.ok) {
+                if (response.status === 429) {
+                  const retryAfter = response.headers.get("Retry-After");
+                  setErrorMessage(
+                    `Rate limited. Retry after ${retryAfter} seconds.`
+                  );
+                }
+              }
+              return response.json();
+            })
             .then((data) => {
               listOfAlbums = listOfAlbums.concat(data["items"]);
               lengthOfIds--;
@@ -72,7 +93,7 @@ export default function Notifications() {
               }
             })
             .catch((error) => console.error("Error fetching data:", error));
-        }, 3000); // Delay each request by 2 seconds
+        }, 4000);
       };
 
       // Iterate through the list of IDs and fetch albums with a delay between requests
@@ -102,10 +123,21 @@ export default function Notifications() {
     ));
     const shortAlbumList = albumList.slice(0, 10);
     setAlbumList(shortAlbumList);
-    console.log(albumList);
   }
 
   getFollowedArtists();
+
+  let content;
+  if (errorMessage) {
+    content = errorMessage;
+  } else {
+    if (albumList) {
+      content = albumList;
+    } else {
+      content = "Loading notifications. This may take a few minutes.";
+    }
+  }
+
   return (
     <>
       <main className="min-h-screen overflow-hidden">
@@ -115,7 +147,7 @@ export default function Notifications() {
 
         <div className="flex mt-8 justify-center w-full h-full overflow-hidden text-black ">
           <div className="sm:w-3/5 lg:w-2/5 pl-2 py-2 flex flex-col gap-3 justify-evenly text-start bg-zinc-200 rounded-lg">
-            {albumList}
+            {content}
           </div>
         </div>
       </main>
