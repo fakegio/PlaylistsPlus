@@ -117,7 +117,9 @@ export default function Notifications() {
     });
     const albumList = albums.map((item) => (
       <p>
-        {item["artists"][0].name} released {item.name}
+        <a href={`https://open.spotify.com/album/${item.id}`} target="_blank">
+          {item["artists"][0].name} released {item.name}
+        </a>
         <p className="text-left font-light">{item.release_date}</p>
       </p>
     ));

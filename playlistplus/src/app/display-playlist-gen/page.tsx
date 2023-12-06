@@ -119,8 +119,6 @@ export default function PlaylistResults() {
         .then((data) => {
           let playlist_id = data.id;
           let playlist_link = data.external_urls.spotify;
-          console.log("The playlist link is " + playlist_link);
-          console.log("Create playlist " + data);
           addToPlaylist(playlist_id, playlist_link);
         })
         .catch((error) => console.error("Error fetching data:", error));
