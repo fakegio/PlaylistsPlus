@@ -6,14 +6,18 @@ import 'reactjs-popup/dist/index.css';
 import Header from "./Header";
 import Sidebar from './Sidebar'; 
 import Slider from '@mui/material/Slider';
+import Popup from 'reactjs-popup';
+import { FacebookShareButton, TwitterShareButton, LinkedinShareButton } from "react-share";
+import { FacebookIcon, TwitterIcon, LinkedinIcon } from "react-share";
 
 //npm install @mui/material
 //npm install @emotion/react
 //npm install @emotion/styled
 
-
-
-
+const iconStyle = {
+  marginLeft: '10px',
+  marginRight: '10px'
+}
 
 export default function Home() {
   const [token, setToken] = useState('');
@@ -298,6 +302,36 @@ export default function Home() {
         <button className="button">Playlist Generator</button>
         <button className="button">Joint Playlist</button>
         <button className="button">Liked/Dislike Songs</button>
+        <Popup className="button" trigger={<button className="sidebar-button">Share Application</button>}
+        position="left center">
+          <div className="icons">
+            <FacebookShareButton
+              url={'https://www.PlaylistsPlus.com'}
+              quote={'I loving using PlaylistsPlus!'}
+              hashtag={"#Spotify"}
+            >
+              <FacebookIcon size={32} round style={iconStyle} />
+            </FacebookShareButton>
+
+            <TwitterShareButton
+              url={'https://www.PlaylistsPlus.com'}
+              title={"Twitter"}
+              quote={'I loving using PlaylistsPlus!'}
+              hashtags={["Spotify", "PlaylistsPlus"]}
+            >
+              <TwitterIcon size={32} round style={iconStyle} />
+            </TwitterShareButton>
+
+            <LinkedinShareButton
+              url={'https://www.PlaylistsPlus.com'}
+              title={"Linkedin"}
+              summary={'I loving using PlaylistsPlus!'}
+              source={"PlaylistsPlus"}
+            >
+              <LinkedinIcon size={32} round style={iconStyle} />
+            </LinkedinShareButton>
+          </div>
+      </Popup>
         <label>Select time range:</label>
         <select onChange={handleTimeRangeChange} value={timeRange}>
           <option value="short_term">Short Term</option>
