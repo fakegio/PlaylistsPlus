@@ -183,8 +183,8 @@ export default function Home() {
     }
 
     function getHiddenGem() {
-      console.log("Fetching hidden gems...");
-      fetch('https://api.spotify.com/v1/me/search?q=tag%3Ahipster&type=track&market=US&limit=5', {
+      console.log("Fetching user's top gems...");
+      fetch('https://api.spotify.com/v1/search?q=tag%3Ahipster&type=album&market=US&limit=20',{
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -449,22 +449,22 @@ export default function Home() {
         </div>
         <div className="hidden-gem textbox">Hidden Gems</div>
         <div className="hidden-gem-textbox">
-          {hiddenGem
-          .filter((item) => item.album.popularity <= popularity)
+        {Array.isArray(hiddenGem) && hiddenGem
+          .filter((album) => album.popularity <= popularity)
           .slice(0, 5)
-          .map((item) => (
-            <div key={item.album.id} className="track-image-container">
-              {item.album.images.length > 0 && (
+          .map((album) => (
+            <div key={album.id} className="track-image-container">
+              {album.images.length > 0 && (
                 <img
-                  src={item.album.images[0].url}
-                  alt={item.album.name}
+                  src={album.images[0].url}
+                  alt={album.name}
                   className="track-image"
                 />
               )}
               <div className="track-details">
-                <div className="track-name">{item.album.name}</div>
+                <div className="track-name">{album.name}</div>
                 <div className="track-artists">
-                  {item.track.artists.map((artist) => artist.name).join(", ")}
+                  {album.artists.map((artist) => artist.name).join(", ")}
                 </div>
               </div>
             </div>
