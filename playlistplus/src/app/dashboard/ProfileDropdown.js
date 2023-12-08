@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import {removeCredentials} from '@/API/authorize';
 
 const ProfileDropdown = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -14,8 +15,9 @@ const ProfileDropdown = () => {
       </button>
       {isOpen && (
         <div className="dropdown-content">
+          <a onClick={event => window.location.href='/notifications'}>Notifications</a>
           <a href="#">Settings</a>
-          <a href="#">Log Out</a>
+          <a href="#" onClick={removeCredentials}>Log Out</a>
         </div>
       )}
     </div>

@@ -8,6 +8,8 @@ import Slider from '@mui/material/Slider';
 import Popup from 'reactjs-popup';
 import { FacebookShareButton, TwitterShareButton, LinkedinShareButton } from "react-share";
 import { FacebookIcon, TwitterIcon, LinkedinIcon } from "react-share";
+import SpotifyPlayer from 'react-spotify-web-playback';
+import { spotifyApi } from 'react-spotify-web-playback';
 
 //npm install @mui/material
 //npm install @emotion/react
@@ -323,9 +325,22 @@ export default function Home() {
   return (
     <div className="app">
       <Header />
-      <div className="button-container">
+      <SpotifyPlayer
+        token={sessionStorage.getItem("access_token")}
+        uris={['spotify:artist:6HQYnRM4OzToCYPpVBInuU']}
+        styles={{
+          activeColor: '#fff',
+          bgColor: '#333',
+          color: '#fff',
+          loaderColor: '#fff',
+          sliderColor: '#1cb954',
+          trackArtistColor: '#ccc',
+          trackNameColor: '#fff',
+        }}
+      />
+        <div className="button-container">
         <button className="button">Mood Sync</button>
-        <button className="button">Playlist Generator</button>
+        <button className="button"onClick={event =>  window.location.href='/playlist-gen'}>Playlist Generator</button>
         <button className="button">Joint Playlist</button>
         <button className="button">Liked/Dislike Songs</button>
         <Popup className="button" trigger={<button className="button">Share Application</button>}>

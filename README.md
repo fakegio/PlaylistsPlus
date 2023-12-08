@@ -6,6 +6,12 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 ## Getting Started
 Make sure that you have [NodeJS](https://nodejs.org/en) installed.
 
+Add a `.env` file with
+`NEXT_PUBLIC_CLIENT_ID = XXXXXXXXXXXXXXX`
+and
+`NEXT_PUBLIC_CLIENT_SECRET = XXXXXXXXXXXXXXX`
+Replace XXXXXXXXXXXXXXX with your Client ID and Client Secret from Spotify Developer Dashboard.
+
 Download the project, open the project in VS Code and type in the terminal `cd playlistplus`.
 
 Then, run the development server:
