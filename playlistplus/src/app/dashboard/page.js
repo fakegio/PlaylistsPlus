@@ -4,7 +4,6 @@ import React, { useState, useEffect } from 'react';
 import './App.css';
 import 'reactjs-popup/dist/index.css';
 import Header from "./Header";
-import Sidebar from './Sidebar'; 
 import Slider from '@mui/material/Slider';
 import Popup from 'reactjs-popup';
 import { FacebookShareButton, TwitterShareButton, LinkedinShareButton } from "react-share";
@@ -29,6 +28,7 @@ export default function Home() {
   const [artist, setArtist] = useState(null);
   const [selectedArtist, setSelectedArtist] = useState(null);
   const [selectedTrack, setSelectedTrack] = useState(null);
+  const [hiddenGem, setHiddenGem] = useState([]);
 
   const [selectedArtistPopularity, setSelectedArtistPopularity] = useState(null);
   const [selectedTrackPopularity, setSelectedTrackPopularity] = useState(null);
@@ -182,6 +182,32 @@ export default function Home() {
       });
     }
 
+    function getHiddenGem() {
+      console.log("Fetching user's top genres...");
+      fetch('https://api.spotify.com/v1/search?q=tag%3Ahipster&type=track&market=US&limit=5&offset=0', {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP status ${response.status}`);
+        }
+        return response.json();
+      })
+      .then(data => {
+          console.log("Hidden gem data:", data);
+          setHiddenGem(data.items);
+        })
+      .catch(error => {
+        console.error("Error getting hidden gems:", error);
+        if (error.response) {
+          error.response.text().then(text => console.error("Response content:", text));
+        }
+        setHiddenGem([]);
+      });
+    }
+
     if (!token) {
       // Token is not available, handle this case
       console.error('Token not available. Redirecting to login...');
@@ -191,6 +217,7 @@ export default function Home() {
         getTopTracks(token); // Fetch top tracks
         getRecentlyPlayed(); // Fetch recently played tracks
         getTopGenres();
+        getHiddenGem();
       } 
 
       if (selectedArtist) {
@@ -295,15 +322,13 @@ export default function Home() {
 
   return (
     <div className="app">
-      <Sidebar /> {/* Include the Sidebar component here */}
       <Header />
       <div className="button-container">
         <button className="button">Mood Sync</button>
         <button className="button">Playlist Generator</button>
         <button className="button">Joint Playlist</button>
         <button className="button">Liked/Dislike Songs</button>
-        <Popup className="button" trigger={<button className="sidebar-button">Share Application</button>}
-        position="left center">
+        <Popup className="button" trigger={<button className="button">Share Application</button>}>
           <div className="icons">
             <FacebookShareButton
               url={'https://www.PlaylistsPlus.com'}
@@ -422,6 +447,29 @@ export default function Home() {
             </div>
           )}
         </div>
+        <div className="hidden-gem textbox">Hidden Gems</div>
+        <div className="hidden-gem-textbox">
+          {hiddenGem
+          .filter((track) => track.popularity <= popularity)
+          .slice(0, 5)
+          .map((track) => (
+            <div key={track.id} className="track-image-container">
+              {track.album.images.length > 0 && (
+                <img
+                  src={track.album.images[0].url}
+                  alt={track.name}
+                  className="track-image"
+                />
+              )}
+              <div className="track-details">
+                <div className="track-name">{track.name}</div>
+                <div className="track-artists">
+                  {track.artists.map((artist) => artist.name).join(", ")}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
       <div className="right-content">
         <div className="top-genres textbox">Top Tracks</div>
@@ -493,7 +541,7 @@ export default function Home() {
       </div>
       <div className="recently-played textbox"> Recent Tracks</div>
       <div className="top-tracks-container">
-        <div className="top-tracks-column">
+      <div className="top-tracks-column">
           {recentlyPlayed
             .filter((item) => item.track.popularity <= popularity)
             .slice(0, 3) // Render the first 3 recent tracks in the first column

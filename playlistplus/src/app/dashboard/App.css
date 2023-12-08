@@ -366,3 +366,16 @@
   margin: 4px 10px 10px 2px;
   justify-content: center;
 }
+
+.hidden-gem-textbox {
+  background-color: grey; /* Set the background color to grey */
+  border-radius: 8px; /* Rounded corners */
+  overflow: hidden; /* Hide overflow */
+  margin: 20px; /* Adjust margin as needed */
+  height: 170px; /* Set a fixed height for all artist containers */
+  width: 140px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Center vertically */
+  align-items: center; /* Center horizontally */
+}
