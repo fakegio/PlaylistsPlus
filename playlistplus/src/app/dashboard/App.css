@@ -329,6 +329,11 @@
   justify-content: space-between; /* Ensure the columns are spaced apart */
 }
 
+.recently-played-container {
+  display: flex;
+  justify-content: space-between; /* Ensure the columns are spaced apart */
+}
+
 .top-tracks-column {
   flex: 1; /* Allow each column to take up equal space */
   /* Define column-specific styles */
@@ -337,4 +342,27 @@
 .track-image-container {
   /* Styles for each track */
   margin-bottom: 20px; /* Add space between tracks */
+}
+
+.popup-content {
+  color: black;
+  border-color: slategray;
+  border-radius: 2px;
+}
+
+.icons {
+  display: flex;
+  margin: 4px 10px 10px 2px;
+  justify-content: center;
+}
+
+.hidden-gem-textbox {
+  display: flex;
+  justify-content: center; /* Adjust as needed */
+  align-items: center;
+  flex-wrap: wrap; /* Allow images to wrap to the next line if there's not enough space */
+}
+
+.introjs-tooltiptext{
+  color: black;
 }
