@@ -30,6 +30,7 @@ export default function Home() {
   const [artist, setArtist] = useState(null);
   const [selectedArtist, setSelectedArtist] = useState(null);
   const [selectedTrack, setSelectedTrack] = useState(null);
+  const [selectedAlbum, setSelectedAlbum] = useState(null);
   const [hiddenGem, setHiddenGem] = useState([]);
 
   const [selectedArtistPopularity, setSelectedArtistPopularity] = useState(null);
@@ -219,7 +220,7 @@ export default function Home() {
         getTopTracks(token); // Fetch top tracks
         getRecentlyPlayed(); // Fetch recently played tracks
         getTopGenres();
-        getHiddenGem();
+        getHiddenGem(token);
       } 
 
       if (selectedArtist) {
@@ -308,6 +309,12 @@ export default function Home() {
     const track = topTracks.find((a) => a.id === selectedTrackId);
     setSelectedTrack(track);
     //setPopularity(track ? track.popularity : null); // Update popularity when track changes
+  };
+
+  const handleAlbumChange = (event) => {
+    const selectedAlbumId = event.target.value;
+    const artist = hiddenGem.find((a) => a.id === selectedAlbumId);
+    setSelectedAlbum(album);
   };
 
   const handleTimeRangeChange = (event) => {
@@ -465,7 +472,6 @@ export default function Home() {
         <div className="hidden-gem textbox">Hidden Gems</div>
         <div className="hidden-gem-textbox">
         {Array.isArray(hiddenGem) && hiddenGem
-          .filter((album) => album.popularity <= popularity)
           .slice(0, 5)
           .map((album) => (
             <div key={album.id} className="track-image-container">
@@ -473,7 +479,7 @@ export default function Home() {
                 <img
                   src={album.images[0].url}
                   alt={album.name}
-                  className="track-image"
+                  className="track-image"topTracks
                 />
               )}
               <div className="track-details">
