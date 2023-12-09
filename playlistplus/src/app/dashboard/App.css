@@ -329,6 +329,11 @@
   justify-content: space-between; /* Ensure the columns are spaced apart */
 }
 
+.recently-played-container {
+  display: flex;
+  justify-content: space-between; /* Ensure the columns are spaced apart */
+}
+
 .top-tracks-column {
   flex: 1; /* Allow each column to take up equal space */
   /* Define column-specific styles */
@@ -352,14 +357,12 @@
 }
 
 .hidden-gem-textbox {
-  background-color: grey; /* Set the background color to grey */
-  border-radius: 8px; /* Rounded corners */
-  overflow: hidden; /* Hide overflow */
-  margin: 20px; /* Adjust margin as needed */
-  height: 170px; /* Set a fixed height for all artist containers */
-  width: 140px;
   display: flex;
-  flex-direction: column;
-  justify-content: center; /* Center vertically */
-  align-items: center; /* Center horizontally */
+  justify-content: center; /* Adjust as needed */
+  align-items: center;
+  flex-wrap: wrap; /* Allow images to wrap to the next line if there's not enough space */
+}
+
+.introjs-tooltiptext{
+  color: black;
 }

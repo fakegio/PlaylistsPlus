@@ -10,6 +10,8 @@ import { FacebookShareButton, TwitterShareButton, LinkedinShareButton } from "re
 import { FacebookIcon, TwitterIcon, LinkedinIcon } from "react-share";
 import SpotifyPlayer from 'react-spotify-web-playback';
 import { spotifyApi } from 'react-spotify-web-playback';
+import { Steps, Hints } from 'intro.js-react';
+import 'intro.js/introjs.css';
 
 //npm install @mui/material
 //npm install @emotion/react
@@ -44,6 +46,40 @@ export default function Home() {
   const [popularity, setPopularity] = useState(100); // Set a default value for popularity
   const [topGenres, setTopGenres] = useState([]);
 
+  const [enabled,setEnabled] = useState(true)
+  const [initialStep,setInitialStep] = useState(0)
+    
+  const onExit = () => {
+      setEnabled(false)  
+  }
+  
+  const steps = [
+      {
+        element: '.artist-images-container',
+        intro: 'This shows your top artists',
+        position: 'right',
+      },
+      {
+        element: '.top-genres-container',
+        intro: 'This shows your top genres',
+        position: 'right',
+      },
+      {
+        element: '.hidden-gem-textbox',
+        intro: 'This displays the top hidden gem albums',
+        position: 'right',
+      },
+      {
+        element: '.top-tracks-container',
+        intro: 'This shows your current top tracks',
+        position: 'left',
+      },
+      {
+        element: '.recently-played-container',
+        intro: 'This shows your most recently played songs',
+        position: 'left',
+      },
+  ];
 
 
   useEffect(() => {
@@ -200,7 +236,7 @@ export default function Home() {
       })
       .then(data => {
           console.log("Hidden gem data:", data);
-          setHiddenGem(data.items);
+          setHiddenGem(data.albums.items);
         })
       .catch(error => {
         console.error("Error getting hidden gems:", error);
@@ -331,6 +367,13 @@ export default function Home() {
 
   return (
     <div className="app">
+      <Steps
+        className="steps"
+        enabled={enabled || true}
+        steps={steps}
+        initialStep={initialStep}
+        onExit={onExit}
+     />
       <Header />
       <SpotifyPlayer
         token={sessionStorage.getItem("access_token")}
@@ -460,14 +503,16 @@ export default function Home() {
             </div>
           )}
 
-          <div className="top-genres textbox">Top Genres</div>
-          {topGenres.length > 0 && (
-            <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', padding: '10px' }}>
-              {topGenres.map((genre, index) => (
-                <div key={index} style={{ backgroundColor: 'grey', padding: '5px', borderRadius: '5px' }}>{genre}</div>
-              ))}
-            </div>
-          )}
+          <div className="top-genres-textbox">Top Genres</div>
+          <div className="top-genres-container">
+            {topGenres.length > 0 && (
+              <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', padding: '10px' }}>
+                {topGenres.map((genre, index) => (
+                  <div key={index} style={{ backgroundColor: 'grey', padding: '5px', borderRadius: '5px' }}>{genre}</div>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
         <div className="hidden-gem textbox">Hidden Gems</div>
         <div className="hidden-gem-textbox">
@@ -561,7 +606,7 @@ export default function Home() {
         )}
       </div>
       <div className="recently-played textbox"> Recent Tracks</div>
-      <div className="top-tracks-container">
+      <div className="recently-played-container">
       <div className="top-tracks-column">
           {recentlyPlayed
             .filter((item) => item.track.popularity <= popularity)
